@@ -4,79 +4,93 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Acceso - GERA</title>
+  <title>Acceso GERA</title>
   <style>
     body {
-      margin: 0;
       font-family: sans-serif;
-      background-color: #f0f0f0;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      justify-content: center;
-      height: 100vh;
+      background-color: #f4f4f4;
+      margin: 0;
+      padding: 0;
+      text-align: center;
     }
     .logo {
-      position: absolute;
-      top: 20px;
-      left: 20px;
-      height: 60px;
+      width: 250px;
+      margin: 20px auto;
     }
-    .login-box {
+    .login-container {
+      margin: 20px auto;
+      padding: 20px;
       background: white;
-      padding: 30px;
-      border-radius: 12px;
-      box-shadow: 0 0 10px rgba(0,0,0,0.1);
-      text-align: center;
       width: 90%;
-      max-width: 350px;
+      max-width: 400px;
+      border-radius: 10px;
+      box-shadow: 0 0 10px #ccc;
     }
     input {
-      width: 100%;
       padding: 10px;
       margin: 10px 0;
-      border-radius: 6px;
-      border: 1px solid #ccc;
+      width: 90%;
+      border: 1px solid #aaa;
+      border-radius: 5px;
+      font-size: 16px;
     }
     button {
+      padding: 12px;
       width: 100%;
-      padding: 10px;
-      background-color: #006666;
+      font-size: 16px;
+      background-color: #0066cc;
       color: white;
       border: none;
-      border-radius: 6px;
+      border-radius: 5px;
       cursor: pointer;
     }
-    .error {
-      color: red;
-      font-size: 0.9em;
-      margin-top: 10px;
+    .menu {
+      display: none;
+      margin-top: 40px;
+    }
+    .menu button {
+      width: 80%;
+      max-width: 300px;
+      margin: 15px auto;
+      padding: 20px;
+      font-size: 20px;
+      background-color: #0077cc;
+      border: none;
+      border-radius: 10px;
+      color: white;
+      display: block;
     }
   </style>
 </head>
 <body>
+  <img class="logo" src="FOTOS/logo.png" alt="Logo GERA" />
 
-  <img src="FOTOS/Ident.png" alt="GERA" class="logo" />
-
-  <div class="login-box">
-    <h2>Acceso</h2>
-    <input type="text" id="usuario" placeholder="Usuario" />
-    <input type="password" id="clave" placeholder="Contraseña" />
+  <div class="login-container" id="login">
+    <h2>Acceder</h2>
+    <input type="text" id="usuario" placeholder="Usuario"/>
+    <input type="password" id="contrasena" placeholder="Contraseña"/>
     <button onclick="acceder()">Entrar</button>
-    <div class="error" id="errorMsg"></div>
+    <p id="error" style="color:red;"></p>
+  </div>
+
+  <div class="menu" id="menu">
+    <button>AVISOS</button>
+    <button>ADMINISTRACIÓN</button>
+    <button>HISTÓRICO</button>
+    <button>RECOGIDA</button>
   </div>
 
   <script>
     function acceder() {
-      const usuario = document.getElementById("usuario").value;
-      const clave = document.getElementById("clave").value;
-      if (usuario === "gera" && clave === "sl2025") {
-        window.location.href = "panel.html";
+      const u = document.getElementById("usuario").value;
+      const c = document.getElementById("contrasena").value;
+      if (u === "gera" && c === "s12025") {
+        document.getElementById("login").style.display = "none";
+        document.getElementById("menu").style.display = "block";
       } else {
-        document.getElementById("errorMsg").innerText = "Usuario o contraseña incorrectos.";
+        document.getElementById("error").innerText = "Usuario o contraseña incorrectos";
       }
     }
   </script>
-
 </body>
 </html>
