@@ -83,33 +83,28 @@
   </div>
 
 <script>
-  function acceder() {
-    const usuario = document.getElementById('usuario').value.trim();
-    const contrasena = document.getElementById('contrasena').value.trim();
+  async function acceder() {
+    const usuario = document.getElementById('usuario').value;
+    const contrasena = document.getElementById('contrasena').value;
 
-    fetch('clientesapp.json')
-      .then(response => {
-        if (!response.ok) throw new Error('No se pudo cargar el JSON');
-        return response.json();
-      })
-      .then(data => {
-        const cliente = data.find(c => String(c.id) === usuario);
+    try {
+      const response = await fetch('clientesapp.json');
+      const clientes = await response.json();
 
-        if (cliente && cliente.password === contrasena) {
-          // Guardar datos útiles en sessionStorage
-          sessionStorage.setItem('clienteID', cliente.id);
-          sessionStorage.setItem('nombreCliente', cliente.nombre);
-          sessionStorage.setItem('necesitaRenovar', cliente.renovar || 'no');
+      const cliente = clientes.find(c => c.id == usuario && c.password == contrasena);
 
-          window.location.href = 'panel.html';
-        } else {
-          document.getElementById('errorMsg').innerText = 'Credenciales incorrectas.';
-        }
-      })
-      .catch(error => {
-        console.error(error);
-        document.getElementById('errorMsg').innerText = 'Error cargando datos de cliente.';
-      });
+      if (cliente) {
+        sessionStorage.setItem('clienteID', cliente.id);
+        sessionStorage.setItem('nombreCliente', cliente.nombre);
+        sessionStorage.setItem('necesitaRenovar', cliente.renovar || 'no');
+        window.location.href = 'panel.html';
+      } else {
+        document.getElementById('errorMsg').innerText = 'Credenciales incorrectas.';
+      }
+    } catch (error) {
+      document.getElementById('errorMsg').innerText = 'Error al cargar datos.';
+      console.error(error);
+    }
   }
 </script>
   
