@@ -4,91 +4,93 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Acceso GERA</title>
+  <title>Acceso Clientes</title>
   <style>
     body {
-      font-family: sans-serif;
-      background-color: #f4f4f4;
       margin: 0;
-      padding: 0;
-      text-align: center;
+      font-family: sans-serif;
+      background: #f4f4f4;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: flex-start;
+      min-height: 100vh;
     }
-    .logo {
-      width: 250px;
-      margin: 20px auto;
-    }
-    .login-container {
-      margin: 20px auto;
-      padding: 20px;
-      background: white;
-      width: 90%;
-      max-width: 400px;
-      border-radius: 10px;
-      box-shadow: 0 0 10px #ccc;
-    }
-    input {
-      padding: 10px;
-      margin: 10px 0;
-      width: 90%;
-      border: 1px solid #aaa;
-      border-radius: 5px;
-      font-size: 16px;
-    }
-    button {
-      padding: 12px;
+
+    .top {
       width: 100%;
+      display: flex;
+      align-items: center;
+      justify-content: flex-start;
+      background-color: white;
+      padding: 10px 20px;
+    }
+
+    .top img {
+      height: 80px;
+    }
+
+    .container {
+      text-align: center;
+      margin-top: 50px;
+    }
+
+    h2 {
+      color: #333;
+    }
+
+    input {
+      display: block;
+      margin: 10px auto;
+      padding: 10px;
       font-size: 16px;
-      background-color: #0066cc;
-      color: white;
-      border: none;
-      border-radius: 5px;
-      cursor: pointer;
-    }
-    .menu {
-      display: none;
-      margin-top: 40px;
-    }
-    .menu button {
       width: 80%;
       max-width: 300px;
-      margin: 15px auto;
-      padding: 20px;
-      font-size: 20px;
-      background-color: #0077cc;
-      border: none;
-      border-radius: 10px;
+    }
+
+    button {
+      padding: 12px 20px;
+      font-size: 16px;
+      background-color: #006600;
       color: white;
-      display: block;
+      border: none;
+      cursor: pointer;
+    }
+
+    button:hover {
+      background-color: #009900;
+    }
+
+    .error {
+      color: red;
+      margin-top: 10px;
     }
   </style>
 </head>
 <body>
-  <img class="logo" src="FOTOS/logo.png" alt="Logo GERA" />
-
-  <div class="login-container" id="login">
-    <h2>Acceder</h2>
-    <input type="text" id="usuario" placeholder="Usuario"/>
-    <input type="password" id="contrasena" placeholder="Contraseña"/>
-    <button onclick="acceder()">Entrar</button>
-    <p id="error" style="color:red;"></p>
+  <div class="top">
+    <img src="FOTOS/logo.png" alt="Logo GERA">
   </div>
 
-  <div class="menu" id="menu">
-    <button>AVISOS</button>
-    <button>ADMINISTRACIÓN</button>
-    <button>HISTÓRICO</button>
-    <button>RECOGIDA</button>
+  <div class="container">
+    <h2>Acceso clientes</h2>
+    <input type="text" id="usuario" placeholder="ID de cliente">
+    <input type="password" id="contrasena" placeholder="Contraseña">
+    <button onclick="acceder()">Acceder</button>
+    <div class="error" id="errorMsg"></div>
   </div>
 
   <script>
     function acceder() {
-      const u = document.getElementById("usuario").value;
-      const c = document.getElementById("contrasena").value;
-      if (u === "gera" && c === "s12025") {
-        document.getElementById("login").style.display = "none";
-        document.getElementById("menu").style.display = "block";
+      const usuario = document.getElementById('usuario').value;
+      const contrasena = document.getElementById('contrasena').value;
+
+      // Usuario: u1 - Contraseña: c1
+      if (usuario === 'u1' && contrasena === 'c1') {
+        sessionStorage.setItem('clienteID', usuario);
+        window.location.href = 'panel.html';
       } else {
-        document.getElementById("error").innerText = "Usuario o contraseña incorrectos";
+        document.getElementById('errorMsg').innerText = 'Credenciales incorrectas.';
       }
     }
   </script>
