@@ -95,7 +95,7 @@
 
       if (cliente) {
         sessionStorage.setItem('clienteID', cliente.id);
-        sessionStorage.setItem('nombreCliente', cliente.nombre);
+        sessionStorage.setItem('nombreCliente', cliente.Nombre);
         sessionStorage.setItem('necesitaRenovar', cliente.renovar || 'no');
         window.location.href = 'panel.html';
       } else {
