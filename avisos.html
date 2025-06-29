@@ -42,23 +42,25 @@
   <h1>¿Qué tipo de servicio necesita?</h1>
 
   <div class="opciones">
-    <button onclick="enviarAviso()">RECOGIDA DE ACEITE VEGETAL USADO</button>
+    <button onclick="enviarAviso('RECOGIDA DE ACEITE VEGETAL USADO')">RECOGIDA DE ACEITE VEGETAL USADO</button>
+    <button onclick="enviarAviso('LIMPIEZA DE FILTROS')">LIMPIEZA DE FILTROS</button>
+    <button onclick="enviarAviso('AMBOS SERVICIOS: RECOGIDA DE ACEITE + LIMPIEZA DE FILTROS')">AMBAS CUESTIONES</button>
   </div>
 
   <script>
-    function enviarAviso() {
+    function enviarAviso(servicio) {
       alert("Su aviso ha sido cursado. Le atenderemos a la mayor brevedad posible.");
 
       const nombre = sessionStorage.getItem("nombreCliente") || "Cliente";
       const id = sessionStorage.getItem("clienteID") || "Sin ID";
 
-      const mensaje = `Hola, soy ${nombre} (ID: ${id}). Necesito una RECOGIDA DE ACEITE VEGETAL USADO.`;
+      const mensaje = `Hola, soy ${nombre} (ID: ${id}). Necesito: ${servicio}.`;
       const mensajeEncoded = encodeURIComponent(mensaje);
-      const numeroWhatsApp = "34670726699"; // <-- CAMBIA ESTE NÚMERO POR EL TUYO
+      const numeroWhatsApp = "34670726699"; // <-- CAMBIA ESTE NÚMERO SI QUIERES
       const url = `https://wa.me/${numeroWhatsApp}?text=${mensajeEncoded}`;
 
-      window.open(url, '_blank'); // Abre WhatsApp en nueva pestaña
-      window.location.href = 'panel.html'; // Regresa al panel
+      window.open(url, '_blank');
+      window.location.href = 'panel.html';
     }
   </script>
 </body>
