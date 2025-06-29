@@ -5,67 +5,69 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>Acceso Clientes</title>
-  <style>
-    body {
-      margin: 0;
-      font-family: sans-serif;
-      background: #f4f4f4;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      justify-content: flex-start;
-      min-height: 100vh;
-    }
 
-    .top {
-      width: 100%;
-      display: flex;
-      align-items: center;
-      justify-content: flex-start;
-      background-color: white;
-      padding: 10px 20px;
-    }
+<style>
+  body {
+    margin: 0;
+    font-family: sans-serif;
+    background: #f4f4f4;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: flex-start;
+    min-height: 100vh;
+  }
 
-    .top img {
-      height: 80px;
-    }
+  .top {
+    width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center; /* Cambiado de flex-start a center */
+    background-color: white;
+    padding: 20px;
+  }
 
-    .container {
-      text-align: center;
-      margin-top: 50px;
-    }
+  .top img {
+    height: 240px; /* Aumentado a 3 veces más */
+  }
 
-    h2 {
-      color: #333;
-    }
+  .container {
+    text-align: center;
+    margin-top: 50px;
+  }
 
-    input {
-      display: block;
-      margin: 10px auto;
-      padding: 10px;
-      font-size: 16px;
-      width: 80%;
-      max-width: 300px;
-    }
+  h2 {
+    color: #333;
+  }
 
-    button {
-      padding: 12px 20px;
-      font-size: 16px;
-      background-color: #006600;
-      color: white;
-      border: none;
-      cursor: pointer;
-    }
+  input {
+    display: block;
+    margin: 10px auto;
+    padding: 10px;
+    font-size: 16px;
+    width: 80%;
+    max-width: 300px;
+  }
 
-    button:hover {
-      background-color: #009900;
-    }
+  button {
+    padding: 12px 20px;
+    font-size: 16px;
+    background-color: #006600;
+    color: white;
+    border: none;
+    cursor: pointer;
+  }
 
-    .error {
-      color: red;
-      margin-top: 10px;
-    }
-  </style>
+  button:hover {
+    background-color: #009900;
+  }
+
+  .error {
+    color: red;
+    margin-top: 10px;
+  }
+</style>
+  
 </head>
 <body>
   <div class="top">
