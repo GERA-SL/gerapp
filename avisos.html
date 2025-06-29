@@ -1,0 +1,56 @@
+
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Solicitar Aviso</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background-color: #f4f6f5;
+      padding: 20px;
+      text-align: center;
+    }
+
+    h1 {
+      color: #006633;
+    }
+
+    .opciones {
+      margin-top: 30px;
+    }
+
+    button {
+      display: block;
+      margin: 10px auto;
+      padding: 15px 30px;
+      font-size: 16px;
+      background-color: #006633;
+      color: white;
+      border: none;
+      border-radius: 6px;
+      cursor: pointer;
+    }
+
+    button:hover {
+      background-color: #004d26;
+    }
+  </style>
+</head>
+<body>
+  <h1>¿Necesita que se le visite para...?</h1>
+  <div class="opciones">
+    <button onclick="enviarRespuesta('RECOGIDA DE ACEITE VEGETAL USADO')">RECOGIDA DE ACEITE VEGETAL USADO</button>
+    <button onclick="enviarRespuesta('CAMBIO DE FILTROS')">CAMBIO DE FILTROS</button>
+    <button onclick="enviarRespuesta('AMBAS CUESTIONES')">AMBAS CUESTIONES</button>
+    <button onclick="enviarRespuesta('OTROS SERVICIOS')">SERVICIOS</button>
+  </div>
+  <script>
+    function enviarRespuesta(opcion) {
+      alert('Gracias. Su solicitud de "' + opcion + '" ha sido registrada. Pronto nos pondremos en contacto.');
+      window.location.href = 'panel.html';
+    }
+  </script>
+</body>
+</html>
