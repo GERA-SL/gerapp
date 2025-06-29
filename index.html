@@ -4,80 +4,79 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>GerApp</title>
+  <title>Acceso - GERA</title>
   <style>
     body {
-      font-family: sans-serif;
       margin: 0;
-      padding: 0;
-      background-color: #f4f4f4;
-      text-align: center;
-    }
-
-    header {
+      font-family: sans-serif;
+      background-color: #f0f0f0;
       display: flex;
-      justify-content: space-between;
+      flex-direction: column;
       align-items: center;
-      background-color: #004c6d;
-      padding: 10px 20px;
+      justify-content: center;
+      height: 100vh;
     }
-
-    header img {
-      height: 50px;
+    .logo {
+      position: absolute;
+      top: 20px;
+      left: 20px;
+      height: 60px;
     }
-
-    h1 {
-      color: white;
-      font-size: 1.5rem;
-      margin: 0 auto;
-      flex-grow: 1;
-      text-align: center;
-    }
-
-    .menu {
-      display: grid;
-      grid-template-columns: 1fr;
-      gap: 20px;
+    .login-box {
+      background: white;
       padding: 30px;
+      border-radius: 12px;
+      box-shadow: 0 0 10px rgba(0,0,0,0.1);
+      text-align: center;
+      width: 90%;
+      max-width: 350px;
     }
-
-    .menu button {
-      font-size: 1.2rem;
-      padding: 15px;
-      border: none;
-      border-radius: 8px;
-      background-color: #007a9b;
+    input {
+      width: 100%;
+      padding: 10px;
+      margin: 10px 0;
+      border-radius: 6px;
+      border: 1px solid #ccc;
+    }
+    button {
+      width: 100%;
+      padding: 10px;
+      background-color: #006666;
       color: white;
-      box-shadow: 0 4px 6px rgba(0,0,0,0.1);
-      transition: background-color 0.3s;
-    }
-
-    .menu button:hover {
-      background-color: #005f7a;
+      border: none;
+      border-radius: 6px;
       cursor: pointer;
     }
-
-    @media (min-width: 600px) {
-      .menu {
-        grid-template-columns: repeat(2, 1fr);
-      }
+    .error {
+      color: red;
+      font-size: 0.9em;
+      margin-top: 10px;
     }
   </style>
 </head>
 <body>
 
-  <header>
-  <img src="FOTOS/Ident.png" alt="Logo GERA" />
-    <h1>GerApp</h1>
-  </header>
+  <img src="fotos/Ident.png" alt="Logo GERA" class="logo" />
 
-  <div class="menu">
-    <button>AVISOS</button>
-    <button>ADMINISTRACIÓN</button>
-    <button>HISTÓRICO</button>
-    <button>RECOGIDA</button>
-    <button>AJUSTES</button>
+  <div class="login-box">
+    <h2>Acceso</h2>
+    <input type="text" id="usuario" placeholder="Usuario" />
+    <input type="password" id="clave" placeholder="Contraseña" />
+    <button onclick="acceder()">Entrar</button>
+    <div class="error" id="errorMsg"></div>
   </div>
+
+  <script>
+    function acceder() {
+      const usuario = document.getElementById("usuario").value;
+      const clave = document.getElementById("clave").value;
+      if (usuario === "gera" && clave === "sl2025") {
+        window.location.href = "panel.html";
+      } else {
+        document.getElementById("errorMsg").innerText = "Usuario o contraseña incorrectos.";
+      }
+    }
+  </script>
 
 </body>
 </html>
