@@ -65,7 +65,10 @@
     <img src="FOTOS/logo.png" alt="Logo GERA">
   </header>
   <div class="container">
-    <h1>Bienvenido ID=1</h1>
+
+<h1 id="saludo"></h1>
+<div id="avisoRenovacion" style="color: red; font-weight: bold; margin-top: 20px;"></div>
+    
     <div class="button-grid">
       <button onclick="alert('Sección en desarrollo')">AVISOS</button>
       <button onclick="alert('Sección en desarrollo')">ADMINISTRACIÓN</button>
@@ -73,5 +76,25 @@
       <button onclick="alert('Sección en desarrollo')">RECOGIDA</button>
     </div>
   </div>
+<script>
+  const nombre = sessionStorage.getItem('nombreCliente');
+  const id = sessionStorage.getItem('clienteID');
+  const renovar = sessionStorage.getItem('necesitaRenovar');
+
+  // Mostrar saludo con nombre e ID
+  const saludo = document.getElementById('saludo');
+  if (nombre && id) {
+    saludo.innerText = `Bienvenido ${nombre} (ID=${id})`;
+  } else {
+    saludo.innerText = 'Bienvenido';
+  }
+
+  // Mostrar aviso si necesita renovar
+  if (renovar === 'sí') {
+    document.getElementById('avisoRenovacion').innerText =
+      '⚠️ Su contrato necesita renovación. Póngase en contacto con la administración.';
+  }
+</script>
+  
 </body>
 </html>
