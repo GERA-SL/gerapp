@@ -2,68 +2,76 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Panel del Cliente</title>
-    <style>
-        body {
-            margin: 0;
-            font-family: Arial, sans-serif;
-            background-color: #f4f6f5;
-        }
-        header {
-            background-color: #ffffff;
-            padding: 10px;
-            display: flex;
-            align-items: center;
-        }
-        header img {
-            height: 60px;
-        }
-        .container {
-            padding: 20px;
-            text-align: center;
-        }
-        h1 {
-            color: #006633;
-            margin-bottom: 30px;
-        }
-        .button-grid {
-            display: grid;
-            grid-template-columns: 1fr;
-            gap: 20px;
-        }
-        .button-grid button {
-            padding: 20px;
-            font-size: 18px;
-            background-color: #006633;
-            color: white;
-            border: none;
-            border-radius: 8px;
-            cursor: pointer;
-        }
-        .button-grid button:hover {
-            background-color: #004d26;
-        }
-        @media(min-width: 600px) {
-            .button-grid {
-                grid-template-columns: repeat(2, 1fr);
-            }
-        }
-    </style>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Panel del Cliente</title>
+  <style>
+    body {
+      margin: 0;
+      font-family: Arial, sans-serif;
+      background-color: #f4f6f5;
+      text-align: center;
+    }
+
+    header {
+      background-color: #ffffff;
+      padding: 20px 0;
+    }
+
+    header img {
+      height: 180px; /* triple del tamaño anterior */
+    }
+
+    .container {
+      padding: 20px;
+    }
+
+    h1 {
+      color: #006633;
+      margin-bottom: 30px;
+    }
+
+    .button-grid {
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 20px;
+      max-width: 400px;
+      margin: 0 auto;
+    }
+
+    .button-grid button {
+      padding: 20px;
+      font-size: 18px;
+      background-color: #006633;
+      color: white;
+      border: none;
+      border-radius: 8px;
+      cursor: pointer;
+    }
+
+    .button-grid button:hover {
+      background-color: #004d26;
+    }
+
+    @media(min-width: 600px) {
+      .button-grid {
+        grid-template-columns: repeat(2, 1fr);
+      }
+    }
+  </style>
 </head>
 <body>
-    <header>
-        <img src="FOTOS/logo.png" alt="Logo Gera">
-    </header>
-    <div class="container">
-        <h1>Bienvenido</h1>
-        <div class="button-grid">
-            <button onclick="alert('Sección en desarrollo')">AVISOS</button>
-            <button onclick="alert('Sección en desarrollo')">ADMINISTRACIÓN</button>
-            <button onclick="alert('Sección en desarrollo')">HISTÓRICO</button>
-            <button onclick="alert('Sección en desarrollo')">RECOGIDA</button>
-        </div>
+  <header>
+    <img src="FOTOS/logo.png" alt="Logo GERA">
+  </header>
+  <div class="container">
+    <h1>Bienvenido ID=1</h1>
+    <div class="button-grid">
+      <button onclick="alert('Sección en desarrollo')">AVISOS</button>
+      <button onclick="alert('Sección en desarrollo')">ADMINISTRACIÓN</button>
+      <button onclick="alert('Sección en desarrollo')">HISTÓRICO</button>
+      <button onclick="alert('Sección en desarrollo')">RECOGIDA</button>
     </div>
+  </div>
 </body>
 </html>
