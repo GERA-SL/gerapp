@@ -39,17 +39,26 @@
   </style>
 </head>
 <body>
-  <h1>¿Necesita que se le visite para...?</h1>
+  <h1>¿Qué tipo de servicio necesita?</h1>
+
   <div class="opciones">
-    <button onclick="enviarRespuesta('RECOGIDA DE ACEITE VEGETAL USADO')">RECOGIDA DE ACEITE VEGETAL USADO</button>
-    <button onclick="enviarRespuesta('CAMBIO DE FILTROS')">CAMBIO DE FILTROS</button>
-    <button onclick="enviarRespuesta('AMBAS CUESTIONES')">AMBAS CUESTIONES</button>
-    <button onclick="enviarRespuesta('OTROS SERVICIOS')">OTROS SERVICIOS</button>
+    <button onclick="enviarAviso()">RECOGIDA DE ACEITE VEGETAL USADO</button>
   </div>
+
   <script>
-    function enviarRespuesta(opcion) {
-      alert('Gracias. Su solicitud de "' + opcion + '" ha sido registrada. Pronto nos pondremos en contacto.');
-      window.location.href = 'panel.html';
+    function enviarAviso() {
+      alert("Su aviso ha sido cursado. Le atenderemos a la mayor brevedad posible.");
+
+      const nombre = sessionStorage.getItem("nombreCliente") || "Cliente";
+      const id = sessionStorage.getItem("clienteID") || "Sin ID";
+
+      const mensaje = `Hola, soy ${nombre} (ID: ${id}). Necesito una RECOGIDA DE ACEITE VEGETAL USADO.`;
+      const mensajeEncoded = encodeURIComponent(mensaje);
+      const numeroWhatsApp = "34670726699"; // <-- CAMBIA ESTE NÚMERO POR EL TUYO
+      const url = `https://wa.me/${numeroWhatsApp}?text=${mensajeEncoded}`;
+
+      window.open(url, '_blank'); // Abre WhatsApp en nueva pestaña
+      window.location.href = 'panel.html'; // Regresa al panel
     }
   </script>
 </body>
