@@ -96,7 +96,7 @@
       if (cliente) {
         sessionStorage.setItem('clienteID', cliente.id);
         sessionStorage.setItem('nombreCliente', cliente.nombre);
-        sessionStorage.setItem('necesitaRenovar', cliente.renovar || 'no');
+        sessionStorage.setItem('necesitaRenovar', cliente.Renovar || 'no');
         window.location.href = 'panel.html';
       } else {
         document.getElementById('errorMsg').innerText = 'Credenciales incorrectas.';
