@@ -4,109 +4,110 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Acceso Clientes</title>
+  <title>Recogida de Aceite</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background-color: #f4f6f5;
+      padding: 20px;
+      text-align: center;
+    }
 
-<style>
-  body {
-    margin: 0;
-    font-family: sans-serif;
-    background: #f4f4f4;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: flex-start;
-    min-height: 100vh;
-  }
+    h1 {
+      color: #006633;
+      margin-bottom: 30px;
+    }
 
-  .top {
-    width: 100%;
-    display: flex;
-    align-items: center;
-    justify-content: center; /* Cambiado de flex-start a center */
-    background-color: white;
-    padding: 20px;
-  }
+    .datos {
+      font-size: 18px;
+      margin-bottom: 30px;
+    }
 
-  .top img {
-    height: 240px; /* Aumentado a 3 veces más */
-  }
+    .urgencia label {
+      margin: 0 10px;
+      font-size: 16px;
+    }
 
-  .container {
-    text-align: center;
-    margin-top: 50px;
-  }
+    .urgencia input {
+      margin-right: 5px;
+    }
 
-  h2 {
-    color: #333;
-  }
+    .botones {
+      margin-top: 30px;
+    }
 
-  input {
-    display: block;
-    margin: 10px auto;
-    padding: 10px;
-    font-size: 16px;
-    width: 80%;
-    max-width: 300px;
-  }
+    .botones button {
+      margin: 0 10px;
+      padding: 12px 24px;
+      font-size: 16px;
+      border: none;
+      border-radius: 6px;
+      cursor: pointer;
+      color: white;
+    }
 
-  button {
-    padding: 12px 20px;
-    font-size: 16px;
-    background-color: #006600;
-    color: white;
-    border: none;
-    cursor: pointer;
-  }
+    .ok {
+      background-color: #006633;
+    }
 
-  button:hover {
-    background-color: #009900;
-  }
+    .ok:hover {
+      background-color: #004d26;
+    }
 
-  .error {
-    color: red;
-    margin-top: 10px;
-  }
-</style>
-  
+    .cancelar {
+      background-color: #888;
+    }
+
+    .cancelar:hover {
+      background-color: #555;
+    }
+  </style>
 </head>
 <body>
-  <div class="top">
-    <img src="FOTOS/logo.png" alt="Logo GERA">
+  <h1>Recogida de Aceite</h1>
+
+  <div class="datos">
+    <p><strong>Cliente:</strong> <span id="nombre"></span></p>
+    <p><strong>Dirección:</strong> <span id="direccion"></span></p>
+    <p><strong>Teléfono:</strong> <span id="telefono"></span></p>
   </div>
 
-  <div class="container">
-    <h2>Acceso clientes</h2>
-    <input type="text" id="usuario" placeholder="ID de cliente">
-    <input type="password" id="contrasena" placeholder="Contraseña">
-    <button onclick="acceder()">Acceder</button>
-    <div class="error" id="errorMsg"></div>
+  <div class="urgencia">
+    <p><strong>Urgencia del aviso (1 = nada urgente, 5 = muy urgente):</strong></p>
+    <label><input type="radio" name="urgencia" value="1">1</label>
+    <label><input type="radio" name="urgencia" value="2">2</label>
+    <label><input type="radio" name="urgencia" value="3" checked>3</label>
+    <label><input type="radio" name="urgencia" value="4">4</label>
+    <label><input type="radio" name="urgencia" value="5">5</label>
   </div>
 
-<script>
-  async function acceder() {
-    const usuario = document.getElementById('usuario').value;
-    const contrasena = document.getElementById('contrasena').value;
+  <div class="botones">
+    <button class="ok" onclick="enviarAviso()">Entrar (OK)</button>
+    <button class="cancelar" onclick="window.history.back()">Anular</button>
+  </div>
 
-    try {
-      const response = await fetch('clientesapp.json');
-      const clientes = await response.json();
+  <script>
+    // Cargar datos del cliente desde sessionStorage
+    const nombre = sessionStorage.getItem("nombreCliente") || "Cliente";
+    const direccion = sessionStorage.getItem("direccionCliente") || "Dirección no disponible";
+    const telefono = sessionStorage.getItem("telefonoCliente") || "Teléfono no disponible";
+    const id = sessionStorage.getItem("clienteID") || "Sin ID";
 
-      const cliente = clientes.find(c => c.id == usuario && c.password == contrasena);
+    document.getElementById("nombre").textContent = nombre;
+    document.getElementById("direccion").textContent = direccion;
+    document.getElementById("telefono").textContent = telefono;
 
-      if (cliente) {
-        sessionStorage.setItem('clienteID', cliente.id);
-        sessionStorage.setItem('nombreCliente', cliente.nombre);
-        sessionStorage.setItem('necesitaRenovar', cliente.Renovar || 'no');
-        window.location.href = 'panel.html';
-      } else {
-        document.getElementById('errorMsg').innerText = 'Credenciales incorrectas.';
-      }
-    } catch (error) {
-      document.getElementById('errorMsg').innerText = 'Error al cargar datos.';
-      console.error(error);
+    function enviarAviso() {
+      const urgencia = document.querySelector('input[name="urgencia"]:checked').value;
+      const mensaje = `Hola, soy ${nombre} (ID: ${id}). Solicito RECOGIDA DE ACEITE VEGETAL USADO. Urgencia: ${urgencia}/5. Dirección: ${direccion}. Teléfono: ${telefono}.`;
+
+      const mensajeEncoded = encodeURIComponent(mensaje);
+      const numeroWhatsApp = "34670726699";
+      const url = `https://wa.me/${numeroWhatsApp}?text=${mensajeEncoded}`;
+
+      window.open(url, '_blank');
+      window.location.href = '../panel.html';
     }
-  }
-</script>
-  
+  </script>
 </body>
 </html>
