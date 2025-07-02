@@ -87,7 +87,7 @@
       const contrasena = document.getElementById('contrasena').value.trim();
 
       try {
-        const response = await fetch('CLIENTES.json');
+        const response = await fetch('CLIENTES.JSON');
         const clientes = await response.json();
 
        const cliente = clientes.find(c => parseInt(c.id) === parseInt(usuario));
