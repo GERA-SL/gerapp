@@ -90,7 +90,8 @@
         const response = await fetch('CLIENTES.json');
         const clientes = await response.json();
 
-        const cliente = clientes.find(c => c.id === usuario);
+       const cliente = clientes.find(c => parseInt(c.id) === parseInt(usuario));
+
 
         if (!cliente) {
           document.getElementById('errorMsg').innerText = 'ID no encontrado.';
