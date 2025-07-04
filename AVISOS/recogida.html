@@ -23,15 +23,6 @@
       margin-bottom: 30px;
     }
 
-    .urgencia label {
-      margin: 0 10px;
-      font-size: 16px;
-    }
-
-    .urgencia input {
-      margin-right: 5px;
-    }
-
     .botones {
       margin-top: 30px;
     }
@@ -73,15 +64,6 @@
     <p><strong>Teléfono:</strong> <span id="telefono"></span></p>
   </div>
 
-  <div class="urgencia">
-    <p><strong>Urgencia del aviso (1 = nada urgente, 5 = muy urgente):</strong></p>
-    <label><input type="radio" name="urgencia" value="1">1</label>
-    <label><input type="radio" name="urgencia" value="2">2</label>
-    <label><input type="radio" name="urgencia" value="3" checked>3</label>
-    <label><input type="radio" name="urgencia" value="4">4</label>
-    <label><input type="radio" name="urgencia" value="5">5</label>
-  </div>
-
   <div class="botones">
     <button class="ok" onclick="enviarAviso()">Entrar (OK)</button>
     <button class="cancelar" onclick="window.history.back()">Anular</button>
@@ -89,20 +71,28 @@
 
   <script>
     // Cargar datos del cliente desde sessionStorage
-    const nombre = sessionStorage.getItem("nombreCliente") || "Cliente";
-    const direccion = sessionStorage.getItem("direccionCliente") || "Dirección no disponible";
-    const municipio = sessionStorage.getItem("localidadCliente") || "Municipio no disponible";
-    const telefono = sessionStorage.getItem("telefonoCliente") || "Teléfono no disponible";
+    let nombre = sessionStorage.getItem("nombreCliente") || "";
+    let direccion = sessionStorage.getItem("direccionCliente") || "";
+    let municipio = sessionStorage.getItem("localidadCliente") || "";
+    let telefono = sessionStorage.getItem("telefonoCliente") || "";
     const id = sessionStorage.getItem("clienteID") || "Sin ID";
 
-    document.getElementById("nombre").textContent = nombre;
-    document.getElementById("direccion").textContent = direccion;
-    document.getElementById("municipio").textContent = municipio;
-    document.getElementById("telefono").textContent = telefono;
+    // Mostrar en la página (con valores por defecto si vacío)
+    if (!nombre) nombre = prompt("Por favor, introduce el nombre del cliente:", "");
+    if (!direccion) direccion = prompt("Por favor, introduce la dirección:", "");
+    if (!municipio) municipio = prompt("Por favor, introduce el municipio:", "");
+    if (!telefono) telefono = prompt("Por favor, introduce el teléfono:", "");
+
+    document.getElementById("nombre").textContent = nombre || "No disponible";
+    document.getElementById("direccion").textContent = direccion || "No disponible";
+    document.getElementById("municipio").textContent = municipio || "No disponible";
+    document.getElementById("telefono").textContent = telefono || "No disponible";
 
     function enviarAviso() {
-      const urgencia = document.querySelector('input[name="urgencia"]:checked').value;
-      const mensaje = `Hola, soy ${nombre} (ID: ${id}). Solicito RECOGIDA DE ACEITE VEGETAL USADO. Urgencia: ${urgencia}/5. Dirección: ${direccion}. Municipio: ${municipio}. Teléfono: ${telefono}.`;
+      const mensaje = `Hola, soy ${nombre} (ID: ${id}). Solicito RECOGIDA DE ACEITE VEGETAL USADO.
+Dirección: ${direccion}.
+Municipio: ${municipio}.
+Teléfono: ${telefono}.`;
 
       const confirmar = confirm(`¿Son correctos estos datos?\n\n${mensaje}`);
       if (!confirmar) return;
