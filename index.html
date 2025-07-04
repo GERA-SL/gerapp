@@ -116,23 +116,8 @@
     }
 
     function generarPassword(id, cp, nombre) {
-      const limpio = nombre.toLowerCase()
-        .normalize("NFD")
-        .replace(/[\u0300-\u036f]/g, "")
-        .replace(/[^a-z0-9]/g, "");
-
-      const l3 = limpio.charAt(2);         // 3ª letra del nombre
-      const l2 = limpio.charAt(1);         // 2ª letra del nombre
-      const l1 = limpio.charAt(0);         // 1ª letra del nombre
-      const cp3 = cp.slice(-3);            // últimos 3 dígitos del CP
-
-const id4 = id.padStart(4, "0");
-const suma = id4.split('').reduce((acc, d) => acc + (parseInt(d, 10) || 0), 0);
-      
-      const numeroInterno = suma % 9 === 0 && suma !== 0 ? 9 : suma % 9;
-
-      return l3 + id4 + l2 + cp3 + l1 + numeroInterno;
-    }
+  return id;
+}
   </script>
 </body>
 </html>
