@@ -1,0 +1,49 @@
+
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <title>Generar Contraseña</title>
+</head>
+<body>
+
+  <h2>Generar Contraseña</h2>
+  <input type="text" id="usuario" placeholder="ID de cliente">
+  <button onclick="mostrarClave()">Aceptar</button>
+
+  <script>
+    function generarPassword(id) {
+      const nombre = "BAR LA BODEGA";
+      const cp = "18260";
+
+      const limpio = nombre.toLowerCase()
+        .normalize("NFD")
+        .replace(/[\u0300-\u036f]/g, "")
+        .replace(/[^a-z0-9]/g, "");
+
+      const l3 = limpio.charAt(2);
+      const l2 = limpio.charAt(1);
+      const l1 = limpio.charAt(0);
+      const cp3 = cp.slice(-3);
+
+      const id4 = id.padStart(4, "0");
+      const suma = id4.split('').reduce((acc, d) => acc + (parseInt(d, 10) || 0), 0);
+
+      const numeroInterno = suma % 9 === 0 && suma !== 0 ? 9 : suma % 9;
+
+      return l3 + id4 + l2 + cp3 + l1 + numeroInterno;
+    }
+
+    function mostrarClave() {
+      const id = document.getElementById('usuario').value.trim();
+      if (!id) {
+        alert("Introduce un ID");
+        return;
+      }
+      const clave = generarPassword(id);
+      alert("Contraseña generada: " + clave);
+    }
+  </script>
+
+</body>
+</html>
