@@ -1,0 +1,138 @@
+
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Acceso Clientes</title>
+
+  <style>
+    body {
+      margin: 0;
+      font-family: sans-serif;
+      background: #f4f4f4;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: flex-start;
+      min-height: 100vh;
+    }
+
+    .top {
+      width: 100%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background-color: white;
+      padding: 20px;
+    }
+
+    .top img {
+      height: 240px;
+    }
+
+    .container {
+      text-align: center;
+      margin-top: 50px;
+    }
+
+    h2 {
+      color: #333;
+    }
+
+    input {
+      display: block;
+      margin: 10px auto;
+      padding: 10px;
+      font-size: 16px;
+      width: 80%;
+      max-width: 300px;
+    }
+
+    button {
+      padding: 12px 20px;
+      font-size: 16px;
+      background-color: #006600;
+      color: white;
+      border: none;
+      cursor: pointer;
+    }
+
+    button:hover {
+      background-color: #009900;
+    }
+
+    .error {
+      color: red;
+      margin-top: 10px;
+    }
+  </style>
+</head>
+<body>
+  <div class="top">
+    <img src="FOTOS/logo.png" alt="Logo GERA">
+  </div>
+
+  <div class="container">
+    <h2>Acceso clientes</h2>
+    <input type="text" id="usuario" placeholder="ID de cliente">
+    <input type="password" id="contrasena" placeholder="Contraseña">
+    <button onclick="acceder()">Acceder</button>
+    <div class="error" id="errorMsg"></div>
+  </div>
+
+  <script>
+    async function acceder() {
+      const usuario = document.getElementById('usuario').value.trim();
+      const contrasena = document.getElementById('contrasena').value.trim();
+
+      try {
+        const response = await fetch('clientes.json');
+        const clientes = await response.json();
+
+       const cliente = clientes.find(c => parseInt(c.id) === parseInt(usuario));
+
+
+        if (!cliente) {
+          document.getElementById('errorMsg').innerText = 'ID no encontrado.';
+          return;
+        }
+
+        const claveEsperada = generarPassword(cliente.id, cliente.cp, cliente.nombre);
+
+        if (contrasena === claveEsperada) {
+          sessionStorage.setItem('clienteID', cliente.id);
+          sessionStorage.setItem('nombreCliente', cliente.nombre);
+          sessionStorage.setItem('necesitaRenovar', cliente.Renovar || 'no');
+          // Redirigir al panel de recogida u otra página
+          window.location.href = 'panel.html';
+        } else {
+          document.getElementById('errorMsg').innerText = 'Contraseña incorrecta.';
+        }
+      } catch (error) {
+        document.getElementById('errorMsg').innerText = 'Error al cargar datos.';
+        console.error(error);
+      }
+    }
+
+    function generarPassword(id, cp, nombre) {
+      const limpio = nombre.toLowerCase()
+        .normalize("NFD")
+        .replace(/[\u0300-\u036f]/g, "")
+        .replace(/[^a-z0-9]/g, "");
+
+      const l3 = limpio.charAt(2);         // 3ª letra del nombre
+      const l2 = limpio.charAt(1);         // 2ª letra del nombre
+      const l1 = limpio.charAt(0);         // 1ª letra del nombre
+      const cp3 = cp.slice(-3);            // últimos 3 dígitos del CP
+
+const id4 = id.padStart(4, "0");
+const suma = id4.split('').reduce((acc, d) => acc + (parseInt(d, 10) || 0), 0);
+      
+      const numeroInterno = suma % 9 === 0 && suma !== 0 ? 9 : suma % 9;
+
+      return l3 + id4 + l2 + cp3 + l1 + numeroInterno;
+    }
+  </script>
+</body>
+</html>
