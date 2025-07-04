@@ -21,6 +21,23 @@
     .datos {
       font-size: 18px;
       margin-bottom: 30px;
+      max-width: 600px;
+      margin-left: auto;
+      margin-right: auto;
+      text-align: left;
+    }
+
+    .datos label {
+      display: block;
+      margin: 10px 0 3px;
+      font-weight: bold;
+    }
+
+    .datos input {
+      width: 100%;
+      padding: 8px;
+      font-size: 16px;
+      box-sizing: border-box;
     }
 
     .botones {
@@ -58,10 +75,17 @@
   <h1>Recogida de Aceite</h1>
 
   <div class="datos">
-    <p><strong>Cliente:</strong> <span id="nombre"></span></p>
-    <p><strong>Dirección:</strong> <span id="direccion"></span></p>
-    <p><strong>Municipio:</strong> <span id="municipio"></span></p>
-    <p><strong>Teléfono:</strong> <span id="telefono"></span></p>
+    <label for="nombre">Cliente:</label>
+    <input type="text" id="nombre" placeholder="Nombre del cliente">
+
+    <label for="direccion">Dirección:</label>
+    <input type="text" id="direccion" placeholder="Dirección">
+
+    <label for="municipio">Municipio:</label>
+    <input type="text" id="municipio" placeholder="Municipio">
+
+    <label for="telefono">Teléfono:</label>
+    <input type="text" id="telefono" placeholder="Teléfono">
   </div>
 
   <div class="botones">
@@ -70,25 +94,19 @@
   </div>
 
   <script>
-    // Cargar datos del cliente desde sessionStorage
-    let nombre = sessionStorage.getItem("nombreCliente") || "";
-    let direccion = sessionStorage.getItem("direccionCliente") || "";
-    let municipio = sessionStorage.getItem("localidadCliente") || "";
-    let telefono = sessionStorage.getItem("telefonoCliente") || "";
+    // Cargar datos del cliente desde sessionStorage y rellenar inputs
+    document.getElementById("nombre").value = sessionStorage.getItem("nombreCliente") || "";
+    document.getElementById("direccion").value = sessionStorage.getItem("direccionCliente") || "";
+    document.getElementById("municipio").value = sessionStorage.getItem("localidadCliente") || "";
+    document.getElementById("telefono").value = sessionStorage.getItem("telefonoCliente") || "";
     const id = sessionStorage.getItem("clienteID") || "Sin ID";
 
-    // Mostrar en la página (con valores por defecto si vacío)
-    if (!nombre) nombre = prompt("Por favor, introduce el nombre del cliente:", "");
-    if (!direccion) direccion = prompt("Por favor, introduce la dirección:", "");
-    if (!municipio) municipio = prompt("Por favor, introduce el municipio:", "");
-    if (!telefono) telefono = prompt("Por favor, introduce el teléfono:", "");
-
-    document.getElementById("nombre").textContent = nombre || "No disponible";
-    document.getElementById("direccion").textContent = direccion || "No disponible";
-    document.getElementById("municipio").textContent = municipio || "No disponible";
-    document.getElementById("telefono").textContent = telefono || "No disponible";
-
     function enviarAviso() {
+      const nombre = document.getElementById("nombre").value.trim() || "Cliente";
+      const direccion = document.getElementById("direccion").value.trim() || "Dirección no disponible";
+      const municipio = document.getElementById("municipio").value.trim() || "Municipio no disponible";
+      const telefono = document.getElementById("telefono").value.trim() || "Teléfono no disponible";
+
       const mensaje = `Hola, soy ${nombre} (ID: ${id}). Solicito RECOGIDA DE ACEITE VEGETAL USADO.
 Dirección: ${direccion}.
 Municipio: ${municipio}.
@@ -96,6 +114,12 @@ Teléfono: ${telefono}.`;
 
       const confirmar = confirm(`¿Son correctos estos datos?\n\n${mensaje}`);
       if (!confirmar) return;
+
+      // Actualizar sessionStorage con los posibles cambios
+      sessionStorage.setItem("nombreCliente", nombre);
+      sessionStorage.setItem("direccionCliente", direccion);
+      sessionStorage.setItem("localidadCliente", municipio);
+      sessionStorage.setItem("telefonoCliente", telefono);
 
       const mensajeEncoded = encodeURIComponent(mensaje);
       const numeroWhatsApp = "34670726699";
