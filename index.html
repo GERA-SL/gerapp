@@ -87,7 +87,7 @@
       const contrasena = document.getElementById('contrasena').value.trim();
 
       try {
-        const response = await fetch('CLIENTES.JSON');
+        const response = await fetch('clientes.json');
         const clientes = await response.json();
 
        const cliente = clientes.find(c => parseInt(c.id) === parseInt(usuario));
@@ -131,7 +131,7 @@ const suma = id4.split('').reduce((acc, d) => acc + (parseInt(d, 10) || 0), 0);
       
       const numeroInterno = suma % 9 === 0 && suma !== 0 ? 9 : suma % 9;
 
-      return l3 + id + l2 + cp3 + l1 + numeroInterno;
+      return l3 + id4 + l2 + cp3 + l1 + numeroInterno;
     }
   </script>
 </body>
