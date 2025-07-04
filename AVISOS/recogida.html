@@ -69,6 +69,7 @@
   <div class="datos">
     <p><strong>Cliente:</strong> <span id="nombre"></span></p>
     <p><strong>Dirección:</strong> <span id="direccion"></span></p>
+    <p><strong>Municipio:</strong> <span id="municipio"></span></p>
     <p><strong>Teléfono:</strong> <span id="telefono"></span></p>
   </div>
 
@@ -90,16 +91,21 @@
     // Cargar datos del cliente desde sessionStorage
     const nombre = sessionStorage.getItem("nombreCliente") || "Cliente";
     const direccion = sessionStorage.getItem("direccionCliente") || "Dirección no disponible";
+    const municipio = sessionStorage.getItem("localidadCliente") || "Municipio no disponible";
     const telefono = sessionStorage.getItem("telefonoCliente") || "Teléfono no disponible";
     const id = sessionStorage.getItem("clienteID") || "Sin ID";
 
     document.getElementById("nombre").textContent = nombre;
     document.getElementById("direccion").textContent = direccion;
+    document.getElementById("municipio").textContent = municipio;
     document.getElementById("telefono").textContent = telefono;
 
     function enviarAviso() {
       const urgencia = document.querySelector('input[name="urgencia"]:checked').value;
-      const mensaje = `Hola, soy ${nombre} (ID: ${id}). Solicito RECOGIDA DE ACEITE VEGETAL USADO. Urgencia: ${urgencia}/5. Dirección: ${direccion}. Teléfono: ${telefono}.`;
+      const mensaje = `Hola, soy ${nombre} (ID: ${id}). Solicito RECOGIDA DE ACEITE VEGETAL USADO. Urgencia: ${urgencia}/5. Dirección: ${direccion}. Municipio: ${municipio}. Teléfono: ${telefono}.`;
+
+      const confirmar = confirm(`¿Son correctos estos datos?\n\n${mensaje}`);
+      if (!confirmar) return;
 
       const mensajeEncoded = encodeURIComponent(mensaje);
       const numeroWhatsApp = "34670726699";
