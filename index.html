@@ -100,15 +100,17 @@
 
         const claveEsperada = generarPassword(cliente.id, cliente.cp, cliente.nombre);
 
-        if (contrasena === claveEsperada) {
-          sessionStorage.setItem('clienteID', cliente.id);
-          sessionStorage.setItem('nombreCliente', cliente.nombre);
-          sessionStorage.setItem('necesitaRenovar', cliente.Renovar || 'no');
-          // Redirigir al panel de recogida u otra página
-          window.location.href = 'panel.html';
-        } else {
-          document.getElementById('errorMsg').innerText = 'Contraseña incorrecta.';
-        }
+       if (contrasena === claveEsperada) {
+  sessionStorage.setItem('clienteID', cliente.id);
+  sessionStorage.setItem('nombreCliente', cliente.nombre);
+  sessionStorage.setItem('direccionCliente', cliente.direccion || 'Dirección no disponible');
+  sessionStorage.setItem('telefonoCliente', cliente.telefono || 'Teléfono no disponible');
+  sessionStorage.setItem('necesitaRenovar', cliente.Renovar || 'no');
+  // Redirigir al panel de recogida u otra página
+  window.location.href = 'panel.html';
+} else {
+  document.getElementById('errorMsg').innerText = 'Contraseña incorrecta.';
+}
       } catch (error) {
         document.getElementById('errorMsg').innerText = 'Error al cargar datos.';
         console.error(error);
