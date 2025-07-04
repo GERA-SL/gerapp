@@ -126,7 +126,9 @@
       const l1 = limpio.charAt(0);         // 1ª letra del nombre
       const cp3 = cp.slice(-3);            // últimos 3 dígitos del CP
 
-      const suma = id.split('').reduce((acc, d) => acc + parseInt(d, 10), 0);
+const id4 = id.padStart(4, "0");
+const suma = id4.split('').reduce((acc, d) => acc + (parseInt(d, 10) || 0), 0);
+      
       const numeroInterno = suma % 9 === 0 && suma !== 0 ? 9 : suma % 9;
 
       return l3 + id + l2 + cp3 + l1 + numeroInterno;
