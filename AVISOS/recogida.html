@@ -42,6 +42,11 @@
       font-style: italic;
     }
 
+    .faltante {
+      border: 2px solid #cc0000;
+      background-color: #fff8f8;
+    }
+
     .botones {
       margin-top: 30px;
     }
@@ -78,6 +83,7 @@
       font-size: 16px;
       margin-bottom: 10px;
       box-sizing: border-box;
+      display: none;
     }
   </style>
 </head>
@@ -87,19 +93,19 @@
   <div class="datos" id="contenedor-datos">
     <label>Cliente:</label>
     <div id="nombreTexto" class="texto"></div>
-    <input id="nombreInput" type="text" placeholder="Nombre del cliente" style="display:none;">
+    <input id="nombreInput" type="text" placeholder="Nombre del cliente">
 
     <label>Dirección:</label>
     <div id="direccionTexto" class="texto"></div>
-    <input id="direccionInput" type="text" placeholder="Dirección" style="display:none;">
+    <input id="direccionInput" type="text" placeholder="Dirección">
 
     <label>Municipio:</label>
     <div id="municipioTexto" class="texto"></div>
-    <input id="municipioInput" type="text" placeholder="Municipio" style="display:none;">
+    <input id="municipioInput" type="text" placeholder="Municipio">
 
     <label>Teléfono:</label>
     <div id="telefonoTexto" class="texto"></div>
-    <input id="telefonoInput" type="text" placeholder="Teléfono" style="display:none;">
+    <input id="telefonoInput" type="text" placeholder="Teléfono">
   </div>
 
   <div class="botones">
@@ -112,7 +118,6 @@
     let datosCompletos = true;
     const id = sessionStorage.getItem("clienteID") || "Sin ID";
 
-    // Mostrar datos
     campos.forEach(campo => {
       let valor;
       if (campo === "municipio") {
@@ -133,14 +138,13 @@
         divTexto.textContent = "Dato no disponible. Por favor, actualiza para continuar.";
         divTexto.classList.add("incompleto");
         inputCampo.style.display = "block";
-        inputCampo.required = true;
-        inputCampo.focus();
+        inputCampo.classList.add("faltante");
         datosCompletos = false;
       } else {
         divTexto.textContent = valor;
         divTexto.classList.remove("incompleto");
         inputCampo.style.display = "none";
-        inputCampo.required = false;
+        inputCampo.classList.remove("faltante");
       }
     });
 
@@ -174,7 +178,6 @@
         return;
       }
 
-      // Datos completos: enviar mensaje
       const nombre = sessionStorage.getItem("nombreCliente");
       const direccion = sessionStorage.getItem("direccionCliente");
       const municipio = sessionStorage.getItem("localidadCliente");
