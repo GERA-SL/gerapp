@@ -33,11 +33,17 @@
       font-weight: bold;
     }
 
-    .datos input {
-      width: 100%;
+    .dato-valor {
       padding: 8px;
       font-size: 16px;
-      box-sizing: border-box;
+      background-color: #fff;
+      border: 1px solid #ccc;
+      border-radius: 4px;
+    }
+
+    .incompleto {
+      color: #aa0000;
+      font-style: italic;
     }
 
     .botones {
@@ -75,37 +81,51 @@
   <h1>Recogida de Aceite</h1>
 
   <div class="datos">
-    <label for="nombre">Cliente:</label>
-    <input type="text" id="nombre" placeholder="Nombre del cliente">
+    <label>Cliente:</label>
+    <div id="nombre" class="dato-valor"></div>
 
-    <label for="direccion">Dirección:</label>
-    <input type="text" id="direccion" placeholder="Dirección">
+    <label>Dirección:</label>
+    <div id="direccion" class="dato-valor"></div>
 
-    <label for="municipio">Municipio:</label>
-    <input type="text" id="municipio" placeholder="Municipio">
+    <label>Municipio:</label>
+    <div id="municipio" class="dato-valor"></div>
 
-    <label for="telefono">Teléfono:</label>
-    <input type="text" id="telefono" placeholder="Teléfono">
+    <label>Teléfono:</label>
+    <div id="telefono" class="dato-valor"></div>
   </div>
 
   <div class="botones">
-    <button class="ok" onclick="enviarAviso()">Entrar (OK)</button>
+    <button class="ok" onclick="verificarDatos()">Los datos son correctos</button>
     <button class="cancelar" onclick="window.history.back()">Anular</button>
   </div>
 
   <script>
-    // Cargar datos del cliente desde sessionStorage y rellenar inputs
-    document.getElementById("nombre").value = sessionStorage.getItem("nombreCliente") || "";
-    document.getElementById("direccion").value = sessionStorage.getItem("direccionCliente") || "";
-    document.getElementById("municipio").value = sessionStorage.getItem("localidadCliente") || "";
-    document.getElementById("telefono").value = sessionStorage.getItem("telefonoCliente") || "";
+    const campos = ["nombre", "direccion", "municipio", "telefono"];
+    let datosCompletos = true;
     const id = sessionStorage.getItem("clienteID") || "Sin ID";
 
-    function enviarAviso() {
-      const nombre = document.getElementById("nombre").value.trim() || "Cliente";
-      const direccion = document.getElementById("direccion").value.trim() || "Dirección no disponible";
-      const municipio = document.getElementById("municipio").value.trim() || "Municipio no disponible";
-      const telefono = document.getElementById("telefono").value.trim() || "Teléfono no disponible";
+    campos.forEach(campo => {
+      const valor = sessionStorage.getItem(`${campo}Cliente`) || "";
+      const elemento = document.getElementById(campo);
+      if (valor.trim() === "") {
+        elemento.textContent = "Dato no disponible";
+        elemento.classList.add("incompleto");
+        datosCompletos = false;
+      } else {
+        elemento.textContent = valor;
+      }
+    });
+
+    function verificarDatos() {
+      if (!datosCompletos) {
+        alert("Por favor, complete los datos que faltan contactando con GERA.");
+        return;
+      }
+
+      const nombre = sessionStorage.getItem("nombreCliente");
+      const direccion = sessionStorage.getItem("direccionCliente");
+      const municipio = sessionStorage.getItem("localidadCliente");
+      const telefono = sessionStorage.getItem("telefonoCliente");
 
       const mensaje = `Hola, soy ${nombre} (ID: ${id}). Solicito RECOGIDA DE ACEITE VEGETAL USADO.
 Dirección: ${direccion}.
@@ -114,12 +134,6 @@ Teléfono: ${telefono}.`;
 
       const confirmar = confirm(`¿Son correctos estos datos?\n\n${mensaje}`);
       if (!confirmar) return;
-
-      // Actualizar sessionStorage con los posibles cambios
-      sessionStorage.setItem("nombreCliente", nombre);
-      sessionStorage.setItem("direccionCliente", direccion);
-      sessionStorage.setItem("localidadCliente", municipio);
-      sessionStorage.setItem("telefonoCliente", telefono);
 
       const mensajeEncoded = encodeURIComponent(mensaje);
       const numeroWhatsApp = "34670726699";
