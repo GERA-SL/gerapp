@@ -1,1 +1,196 @@
 
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Recogida de Aceite</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background-color: #f4f6f5;
+      padding: 20px;
+      text-align: center;
+    }
+
+    h1 {
+      color: #006633;
+      margin-bottom: 30px;
+    }
+
+    .datos {
+      font-size: 18px;
+      margin-bottom: 30px;
+      max-width: 600px;
+      margin-left: auto;
+      margin-right: auto;
+      text-align: left;
+    }
+
+    .datos label {
+      display: block;
+      margin: 10px 0 3px;
+      font-weight: bold;
+    }
+
+    .texto {
+      margin-bottom: 8px;
+    }
+
+    .incompleto {
+      color: #aa0000;
+      font-style: italic;
+    }
+
+    .faltante {
+      border: 2px solid #cc0000;
+      background-color: #fff8f8;
+    }
+
+    .botones {
+      margin-top: 30px;
+    }
+
+    .botones button {
+      margin: 0 10px;
+      padding: 12px 24px;
+      font-size: 16px;
+      border: none;
+      border-radius: 6px;
+      cursor: pointer;
+      color: white;
+    }
+
+    .ok {
+      background-color: #006633;
+    }
+
+    .ok:hover {
+      background-color: #004d26;
+    }
+
+    .cancelar {
+      background-color: #888;
+    }
+
+    .cancelar:hover {
+      background-color: #555;
+    }
+
+    input {
+      width: 100%;
+      padding: 8px;
+      font-size: 16px;
+      margin-bottom: 10px;
+      box-sizing: border-box;
+    }
+  </style>
+</head>
+<body>
+  <h1>Recogida de Aceite</h1>
+
+  <div class="datos" id="contenedor-datos">
+    <label>Cliente:</label>
+    <div id="nombreTexto" class="texto"></div>
+    <input id="nombreInput" type="text" placeholder="Nombre del cliente">
+
+    <label>Dirección:</label>
+    <div id="direccionTexto" class="texto"></div>
+    <input id="direccionInput" type="text" placeholder="Dirección">
+
+    <label>Municipio:</label>
+    <div id="municipioTexto" class="texto"></div>
+    <input id="municipioInput" type="text" placeholder="Municipio">
+
+    <label>Teléfono:</label>
+    <div id="telefonoTexto" class="texto"></div>
+    <input id="telefonoInput" type="text" placeholder="Teléfono">
+  </div>
+
+  <div class="botones">
+    <button class="ok" id="botonContinuar" onclick="gestionarDatos()">Guardar y continuar</button>
+    <button class="cancelar" onclick="window.history.back()">Anular</button>
+  </div>
+
+  <script>
+    const campos = [
+      { id: "nombre", key: "nombreCliente" },
+      { id: "direccion", key: "direccionCliente" },
+      { id: "municipio", key: "localidadCliente" },
+      { id: "telefono", key: "telefonoCliente" }
+    ];
+
+    let datosCompletos = true;
+    const id = sessionStorage.getItem("clienteID") || "Sin ID";
+
+    campos.forEach(({ id, key }) => {
+      const valor = sessionStorage.getItem(key) || "";
+      const divTexto = document.getElementById(id + "Texto");
+      const inputCampo = document.getElementById(id + "Input");
+
+      if (valor.trim() === "") {
+        divTexto.textContent = "Dato no disponible. Por favor, actualiza para continuar.";
+        divTexto.classList.add("incompleto");
+        inputCampo.classList.add("faltante");
+        inputCampo.style.display = "block";
+        datosCompletos = false;
+      } else {
+        divTexto.textContent = valor;
+        divTexto.classList.remove("incompleto");
+        inputCampo.classList.remove("faltante");
+        inputCampo.style.display = "none";
+      }
+    });
+
+    document.getElementById("botonContinuar").textContent = datosCompletos ? "Continuar" : "Guardar y continuar";
+
+    function gestionarDatos() {
+      if (!datosCompletos) {
+        let todosRellenados = true;
+
+        campos.forEach(({ id, key }) => {
+          const input = document.getElementById(id + "Input");
+          const valor = input.value.trim();
+
+          if (input.style.display === "block") {
+            if (valor === "") {
+              todosRellenados = false;
+              input.classList.add("faltante");
+            } else {
+              sessionStorage.setItem(key, valor);
+            }
+          }
+        });
+
+        if (!todosRellenados) {
+          alert("Por favor, rellene todos los campos obligatorios.");
+          return;
+        }
+
+        location.reload();
+        return;
+      }
+
+      const nombre = sessionStorage.getItem("nombreCliente") || "";
+      const direccion = sessionStorage.getItem("direccionCliente") || "";
+      const municipio = sessionStorage.getItem("localidadCliente") || "";
+      const telefono = sessionStorage.getItem("telefonoCliente") || "";
+
+      const mensaje = `Hola, soy ${nombre} (ID: ${id}). Solicito RECOGIDA DE ACEITE VEGETAL USADO.
+Dirección: ${direccion}.
+Municipio: ${municipio}.
+Teléfono: ${telefono}.`;
+
+      const confirmar = confirm(`¿Son correctos estos datos?\n\n${mensaje}`);
+      if (!confirmar) return;
+
+      const mensajeEncoded = encodeURIComponent(mensaje);
+      const numeroWhatsApp = "34670726699";
+      const url = `https://wa.me/${numeroWhatsApp}?text=${mensajeEncoded}`;
+
+      window.open(url, '_blank');
+      window.location.href = '../panel.html';
+    }
+  </script>
+</body>
+</html>
