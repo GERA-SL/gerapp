@@ -124,8 +124,8 @@
       const divTexto = document.getElementById(campo + "Texto");
       const inputCampo = document.getElementById(campo + "Input");
 
-      if (!inputCampo) {
-        console.warn(`No se encontró el input para: ${campo}`);
+      if (!divTexto || !inputCampo) {
+        console.warn(`No se encontró div o input para: ${campo}`);
         return;
       }
 
@@ -133,10 +133,14 @@
         divTexto.textContent = "Dato no disponible. Por favor, actualiza para continuar.";
         divTexto.classList.add("incompleto");
         inputCampo.style.display = "block";
+        inputCampo.required = true;
+        inputCampo.focus();
         datosCompletos = false;
       } else {
         divTexto.textContent = valor;
+        divTexto.classList.remove("incompleto");
         inputCampo.style.display = "none";
+        inputCampo.required = false;
       }
     });
 
@@ -194,4 +198,3 @@ Teléfono: ${telefono}.`;
   </script>
 </body>
 </html>
-
