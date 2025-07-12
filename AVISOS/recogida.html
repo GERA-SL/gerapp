@@ -92,19 +92,19 @@
   <div class="datos" id="contenedor-datos">
     <label>Cliente:</label>
     <div id="nombreTexto" class="texto"></div>
-    <input id="nombreInput" type="text" placeholder="Nombre del cliente">
+    <input id="nombreInput" type="text" placeholder="Nombre del cliente" />
 
     <label>Dirección:</label>
     <div id="direccionTexto" class="texto"></div>
-    <input id="direccionInput" type="text" placeholder="Dirección">
+    <input id="direccionInput" type="text" placeholder="Dirección" />
 
     <label>Municipio:</label>
     <div id="municipioTexto" class="texto"></div>
-    <input id="municipioInput" type="text" placeholder="Municipio">
+    <input id="municipioInput" type="text" placeholder="Municipio" />
 
     <label>Teléfono:</label>
     <div id="telefonoTexto" class="texto"></div>
-    <input id="telefonoInput" type="text" placeholder="Teléfono">
+    <input id="telefonoInput" type="text" placeholder="Teléfono" />
   </div>
 
   <div class="botones">
@@ -126,19 +126,19 @@
     campos.forEach(({ id, key }) => {
       const valor = sessionStorage.getItem(key) || "";
       const divTexto = document.getElementById(id + "Texto");
-      const inputCampo = document.getElementById(id + "Input");
+      const input = document.getElementById(id + "Input");
 
       if (valor.trim() === "") {
         divTexto.textContent = "Dato no disponible. Por favor, actualiza para continuar.";
         divTexto.classList.add("incompleto");
-        inputCampo.classList.add("faltante");
-        inputCampo.style.display = "block";
+        input.classList.add("faltante");
+        input.style.display = "block";
         datosCompletos = false;
       } else {
         divTexto.textContent = valor;
         divTexto.classList.remove("incompleto");
-        inputCampo.classList.remove("faltante");
-        inputCampo.style.display = "none";
+        input.classList.remove("faltante");
+        input.style.display = "none";
       }
     });
 
