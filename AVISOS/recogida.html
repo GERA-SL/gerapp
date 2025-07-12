@@ -80,7 +80,7 @@
 <body>
   <h1>Recogida de Aceite</h1>
 
-  <div class="datos" id="contenedor-datos">
+  <div class="datos">
     <label for="nombreInput">Cliente:</label>
     <input id="nombreInput" type="text" placeholder="Nombre del cliente" />
 
@@ -114,9 +114,12 @@
       const valor = sessionStorage.getItem(key);
 
       if (valor && valor.trim() !== "") {
-        input.value = valor;
+        input.value = valor.trim();
         input.readOnly = true;
+        input.classList.remove("faltante");
       } else {
+        input.readOnly = false;
+        input.value = "";
         input.placeholder = "Dato no disponible. Introducir:";
         input.classList.add("faltante");
         datosCompletos = false;
@@ -128,7 +131,6 @@
 
       campos.forEach(({ id, key }) => {
         const input = document.getElementById(id + "Input");
-
         if (!input.readOnly) {
           const valor = input.value.trim();
           if (valor === "") {
@@ -167,3 +169,4 @@ Teléfono: ${telefono}.`;
   </script>
 </body>
 </html>
+
