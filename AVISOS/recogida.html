@@ -83,7 +83,6 @@
       font-size: 16px;
       margin-bottom: 10px;
       box-sizing: border-box;
-      display: none;
     }
   </style>
 </head>
@@ -119,7 +118,7 @@
     const id = sessionStorage.getItem("clienteID") || "Sin ID";
 
     campos.forEach(campo => {
-      let valor;
+      let valor = "";
       if (campo === "municipio") {
         valor = sessionStorage.getItem("localidadCliente") || "";
       } else {
@@ -128,11 +127,6 @@
 
       const divTexto = document.getElementById(campo + "Texto");
       const inputCampo = document.getElementById(campo + "Input");
-
-      if (!divTexto || !inputCampo) {
-        console.warn(`No se encontró div o input para: ${campo}`);
-        return;
-      }
 
       if (valor.trim() === "") {
         divTexto.textContent = "Dato no disponible. Por favor, actualiza para continuar.";
@@ -148,40 +142,43 @@
       }
     });
 
-    const boton = document.getElementById("botonContinuar");
-    boton.textContent = datosCompletos ? "Continuar" : "Guardar y continuar";
+    document.getElementById("botonContinuar").textContent = datosCompletos ? "Continuar" : "Guardar y continuar";
 
     function gestionarDatos() {
       if (!datosCompletos) {
-        let algunoRellenado = false;
+        let todosRellenados = true;
 
         campos.forEach(campo => {
           const input = document.getElementById(campo + "Input");
           const valor = input.value.trim();
-          if (input.style.display === "block" && valor !== "") {
-            if (campo === "municipio") {
-              sessionStorage.setItem("localidadCliente", valor);
+
+          if (input.style.display === "block") {
+            if (valor === "") {
+              todosRellenados = false;
+              input.classList.add("faltante");
             } else {
-              sessionStorage.setItem(campo + "Cliente", valor);
+              if (campo === "municipio") {
+                sessionStorage.setItem("localidadCliente", valor);
+              } else {
+                sessionStorage.setItem(campo + "Cliente", valor);
+              }
             }
-            algunoRellenado = true;
           }
         });
 
-        if (!algunoRellenado) {
-          alert("Por favor, rellene al menos un dato pendiente.");
+        if (!todosRellenados) {
+          alert("Por favor, rellene todos los campos obligatorios.");
           return;
         }
 
-        // ATENCIÓN: actualizar manualmente el archivo clientesapp.json si el cliente completa datos nuevos.
         location.reload();
         return;
       }
 
-      const nombre = sessionStorage.getItem("nombreCliente");
-      const direccion = sessionStorage.getItem("direccionCliente");
-      const municipio = sessionStorage.getItem("localidadCliente");
-      const telefono = sessionStorage.getItem("telefonoCliente");
+      const nombre = sessionStorage.getItem("nombreCliente") || "";
+      const direccion = sessionStorage.getItem("direccionCliente") || "";
+      const municipio = sessionStorage.getItem("localidadCliente") || "";
+      const telefono = sessionStorage.getItem("telefonoCliente") || "";
 
       const mensaje = `Hola, soy ${nombre} (ID: ${id}). Solicito RECOGIDA DE ACEITE VEGETAL USADO.
 Dirección: ${direccion}.
