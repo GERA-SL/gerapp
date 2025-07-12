@@ -114,9 +114,20 @@
 
     // Mostrar datos
     campos.forEach(campo => {
-      const valor = sessionStorage.getItem(campo + "Cliente") || "";
+      let valor;
+      if (campo === "municipio") {
+        valor = sessionStorage.getItem("localidadCliente") || "";
+      } else {
+        valor = sessionStorage.getItem(campo + "Cliente") || "";
+      }
+
       const divTexto = document.getElementById(campo + "Texto");
       const inputCampo = document.getElementById(campo + "Input");
+
+      if (!inputCampo) {
+        console.warn(`No se encontró el input para: ${campo}`);
+        return;
+      }
 
       if (valor.trim() === "") {
         divTexto.textContent = "Dato no disponible. Por favor, actualiza para continuar.";
@@ -138,8 +149,13 @@
 
         campos.forEach(campo => {
           const input = document.getElementById(campo + "Input");
-          if (input.style.display === "block" && input.value.trim() !== "") {
-            sessionStorage.setItem(campo + "Cliente", input.value.trim());
+          const valor = input.value.trim();
+          if (input.style.display === "block" && valor !== "") {
+            if (campo === "municipio") {
+              sessionStorage.setItem("localidadCliente", valor);
+            } else {
+              sessionStorage.setItem(campo + "Cliente", valor);
+            }
             algunoRellenado = true;
           }
         });
@@ -157,7 +173,7 @@
       // Datos completos: enviar mensaje
       const nombre = sessionStorage.getItem("nombreCliente");
       const direccion = sessionStorage.getItem("direccionCliente");
-      const municipio = sessionStorage.getItem("localidadCliente") || sessionStorage.getItem("municipioCliente");
+      const municipio = sessionStorage.getItem("localidadCliente");
       const telefono = sessionStorage.getItem("telefonoCliente");
 
       const mensaje = `Hola, soy ${nombre} (ID: ${id}). Solicito RECOGIDA DE ACEITE VEGETAL USADO.
@@ -178,3 +194,4 @@ Teléfono: ${telefono}.`;
   </script>
 </body>
 </html>
+
