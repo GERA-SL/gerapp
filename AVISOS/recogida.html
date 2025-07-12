@@ -84,6 +84,10 @@
       margin-bottom: 10px;
       box-sizing: border-box;
     }
+
+    .oculto {
+      display: none;
+    }
   </style>
 </head>
 <body>
@@ -129,16 +133,15 @@
       const input = document.getElementById(id + "Input");
 
       if (valor.trim() === "") {
-        divTexto.textContent = "Dato no disponible. Por favor, actualiza para continuar.";
+        datosCompletos = false;
+        divTexto.textContent = "Dato no disponible. Por favor, introdúcelo:";
         divTexto.classList.add("incompleto");
         input.classList.add("faltante");
-        input.style.display = "block";
-        datosCompletos = false;
+        input.classList.remove("oculto");
       } else {
         divTexto.textContent = valor;
         divTexto.classList.remove("incompleto");
-        input.classList.remove("faltante");
-        input.style.display = "none";
+        input.classList.add("oculto");
       }
     });
 
@@ -152,7 +155,7 @@
           const input = document.getElementById(id + "Input");
           const valor = input.value.trim();
 
-          if (input.style.display === "block") {
+          if (!input.classList.contains("oculto")) {
             if (valor === "") {
               todosRellenados = false;
               input.classList.add("faltante");
@@ -163,7 +166,7 @@
         });
 
         if (!todosRellenados) {
-          alert("Por favor, rellene todos los campos obligatorios.");
+          alert("Por favor, complete todos los campos obligatorios.");
           return;
         }
 
