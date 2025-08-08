@@ -95,20 +95,17 @@
       container.appendChild(lbl);
 
       if (valor) {
-        // Mostrar como texto verde
         const span = document.createElement("span");
         span.className = "no-editable";
         span.textContent = valor;
         container.appendChild(span);
       } else {
-        // Mostrar como input editable
         const input = document.createElement("input");
         input.type = "text";
         input.placeholder = `${label} no disponible`;
         input.className = "editable";
         input.dataset.key = key;
 
-        // 🔹 Borrar texto y placeholder al enfocar o tocar
         input.addEventListener("focus", () => {
           input.value = "";
           input.placeholder = "";
@@ -117,6 +114,14 @@
         container.appendChild(input);
       }
     });
+
+    // Cambiar texto del botón según si hay campos editables
+    const hayEditable = container.querySelector("input") !== null;
+    if (!hayEditable) {
+      document.querySelector(".ok").textContent = "Continuar";
+    } else {
+      document.querySelector(".ok").textContent = "Guardar y continuar";
+    }
 
     function gestionarDatos() {
       const inputs = container.querySelectorAll("input");
