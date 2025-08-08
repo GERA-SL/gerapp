@@ -1,0 +1,156 @@
+
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Recogida de Aceite</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background-color: #f4f6f5;
+      padding: 20px;
+      text-align: center;
+    }
+    h1 {
+      color: #006633;
+      margin-bottom: 30px;
+    }
+    .datos {
+      font-size: 18px;
+      margin-bottom: 30px;
+      max-width: 600px;
+      margin-left: auto;
+      margin-right: auto;
+      text-align: left;
+    }
+    .datos label {
+      display: block;
+      margin: 10px 0 3px;
+      font-weight: bold;
+    }
+    input {
+      width: 100%;
+      padding: 8px;
+      font-size: 16px;
+      margin-bottom: 10px;
+      box-sizing: border-box;
+    }
+    .faltante {
+      border: 2px solid #cc0000;
+      background-color: #fff8f8;
+    }
+    .editable {
+      border: 2px solid #006633;
+      background-color: #f8fff8;
+    }
+    /* Estilo para valores no editables */
+    .no-editable {
+      display: block;
+      font-size: 20px;
+      font-weight: bold;
+      color: green;
+      padding: 6px 0;
+      margin-bottom: 10px;
+    }
+    .botones { margin-top: 30px; }
+    .botones button {
+      margin: 0 10px;
+      padding: 12px 24px;
+      font-size: 16px;
+      border: none;
+      border-radius: 6px;
+      cursor: pointer;
+      color: white;
+    }
+    .ok { background-color: #006633; }
+    .ok:hover { background-color: #004d26; }
+    .cancelar { background-color: #888; }
+    .cancelar:hover { background-color: #555; }
+  </style>
+</head>
+<body>
+  <h1>Recogida de Aceite</h1>
+
+  <div class="datos">
+    <label for="nombreInput">Cliente:</label>
+    <span id="nombreSpan" class="no-editable"></span>
+
+    <label for="direccionInput">Dirección:</label>
+    <span id="direccionSpan" class="no-editable"></span>
+
+    <label for="municipioInput">Municipio:</label>
+    <span id="municipioSpan" class="no-editable"></span>
+
+    <label for="telefonoInput">Teléfono:</label>
+    <input id="telefonoInput" type="text" placeholder="Teléfono no disponible" />
+  </div>
+
+  <div class="botones">
+    <button class="ok" onclick="gestionarDatos()">Guardar y continuar</button>
+    <button class="cancelar" onclick="window.history.back()">Anular</button>
+  </div>
+
+  <script>
+    const idCliente = (sessionStorage.getItem("clienteID") || "").trim();
+
+    // Rellenar campos fijos (no editables) como texto verde
+    const nombre    = (sessionStorage.getItem("nombreCliente")    || "").trim();
+    const direccion = (sessionStorage.getItem("direccionCliente") || "").trim();
+    const municipio = (sessionStorage.getItem("localidadCliente") || "").trim();
+    const telefono  = (sessionStorage.getItem("telefonoCliente")  || "").trim();
+
+    document.getElementById("nombreSpan").textContent    = nombre    || "Dato no disponible";
+    document.getElementById("direccionSpan").textContent = direccion || "Dato no disponible";
+    document.getElementById("municipioSpan").textContent = municipio || "Dato no disponible";
+
+    const telInput = document.getElementById("telefonoInput");
+
+    if (telefono && idCliente !== "3") {
+      // Cliente que NO es 3 y ya tiene teléfono -> mostrar como no editable
+      telInput.remove();
+      const telSpan = document.createElement("span");
+      telSpan.id = "telefonoSpan";
+      telSpan.className = "no-editable";
+      telSpan.textContent = telefono;
+      document.querySelector('label[for="telefonoInput"]').after(telSpan);
+    } else {
+      // Editable: si tiene teléfono y es cliente 3, lo mostramos en input
+      telInput.value = (telefono && idCliente === "3") ? telefono : "";
+      telInput.classList.add("editable");
+      telInput.addEventListener("focus", () => {
+        if (telInput.placeholder === "Teléfono no disponible") {
+          telInput.placeholder = "";
+        }
+      });
+    }
+
+    function gestionarDatos() {
+      let telefonoFinal = telefono;
+
+      // Si hay input (editable)
+      if (document.getElementById("telefonoInput")) {
+        const valor = telInput.value.trim();
+        if (valor === "") {
+          alert("Por favor, introduce el teléfono.");
+          return;
+        }
+        telefonoFinal = valor;
+        sessionStorage.setItem("telefonoCliente", valor);
+      }
+
+      const mensaje = `Hola, soy ${nombre} (ID: ${idCliente}). Solicito RECOGIDA DE ACEITE VEGETAL USADO.
+Dirección: ${direccion}.
+Municipio: ${municipio}.
+Teléfono: ${telefonoFinal}.`;
+
+      if (!confirm(`¿Son correctos estos datos?\n\n${mensaje}`)) return;
+
+      const numeroWhatsApp = "34670726699";
+      const url = `https://wa.me/${numeroWhatsApp}?text=${encodeURIComponent(mensaje)}`;
+      window.open(url, '_blank');
+      window.location.href = '../panel.html';
+    }
+  </script>
+</body>
+</html>
