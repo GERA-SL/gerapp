@@ -168,37 +168,43 @@ actualizarBoton();
     }
 
     function gestionarDatos() {
-      let telefonoFinal = telefono;
+  // Validación: no continuar si falta algún editable
+  const editables = Array.from(document.querySelectorAll("input.editable"));
+  const incompletos = editables.filter(i => {
+    const val = i.value.trim();
+    return val === "" || val === "Teléfono no disponible";
+  });
+  if (incompletos.length > 0) {
+    alert("Por favor, complete todos los campos antes de continuar.");
+    return;
+  }
 
-      // Si hay input (editable)
-     const editables = Array.from(document.querySelectorAll("input.editable"));
-const incompletos = editables.filter(i => {
-  const val = i.value.trim();
-  return val === "" || val === "Teléfono no disponible";
-});
+  // Guardar TODOS los editables (nombre/dirección/municipio/teléfono, etc.)
+  editables.forEach(i => {
+    sessionStorage.setItem(i.dataset.key, i.value.trim());
+  });
 
-if (incompletos.length > 0) {
-  alert("Por favor, complete todos los campos antes de continuar.");
-  return;
-}
+  // Tomar los valores finales ya guardados
+  const nombreFinal    = (sessionStorage.getItem("nombreCliente")    || "").trim();
+  const direccionFinal = (sessionStorage.getItem("direccionCliente") || "").trim();
+  const municipioFinal = (sessionStorage.getItem("localidadCliente") || "").trim();
+  let telefonoFinal    = (sessionStorage.getItem("telefonoCliente")  || "").trim();
 
-if (document.getElementById("telefonoInput")) {
-  const valor = telInput.value.trim();
-  telefonoFinal = valor;
-  sessionStorage.setItem("telefonoCliente", valor);
-}
+  // Si existe el input de teléfono en esta pantalla, usa su valor actual
+  const telInputRef = document.getElementById("telefonoInput");
+  if (telInputRef) telefonoFinal = telInputRef.value.trim();
 
-      const mensaje = `Hola, soy ${nombre} (ID: ${idCliente}). Solicito RECOGIDA DE ACEITE VEGETAL USADO.
-Dirección: ${direccion}.
-Municipio: ${municipio}.
+  const mensaje = `Hola, soy ${nombreFinal} (ID: ${idCliente}). Solicito RECOGIDA DE ACEITE VEGETAL USADO.
+Dirección: ${direccionFinal}.
+Municipio: ${municipioFinal}.
 Teléfono: ${telefonoFinal}.`;
 
-      if (!confirm(`¿Son correctos estos datos?\n\n${mensaje}`)) return;
+  if (!confirm(`¿Son correctos estos datos?\n\n${mensaje}`)) return;
 
-      const numeroWhatsApp = "34670726699";
-      const url = `https://wa.me/${numeroWhatsApp}?text=${encodeURIComponent(mensaje)}`;
-      window.location.href = url;
-    }
+  const numeroWhatsApp = "34670726699";
+  const url = `https://wa.me/${numeroWhatsApp}?text=${encodeURIComponent(mensaje)}`;
+  window.location.href = url;
+}
   </script>
 </body>
 </html>
