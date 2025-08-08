@@ -130,7 +130,10 @@ function actualizarBoton() {
     btnOk.disabled = false; // no hay campos a rellenar
     return;
   }
-  const completos = editables.every(i => i.value.trim() !== "");
+  const completos = editables.every(i => {
+    const val = i.value.trim();
+    return val !== "" && val !== "Teléfono no disponible";
+  });
   btnOk.disabled = !completos;
 }
 document.querySelectorAll("input.editable").forEach(i => {
