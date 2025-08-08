@@ -73,13 +73,13 @@
   <h1>Recogida de Aceite</h1>
 
   <div class="datos">
-    <label for="nombreInput">Cliente:</label>
+    <label>Cliente:</label>
     <span id="nombreSpan" class="no-editable"></span>
 
-    <label for="direccionInput">Dirección:</label>
+    <label>Dirección:</label>
     <span id="direccionSpan" class="no-editable"></span>
 
-    <label for="municipioInput">Municipio:</label>
+    <label>Municipio:</label>
     <span id="municipioSpan" class="no-editable"></span>
 
     <label for="telefonoInput">Teléfono:</label>
@@ -94,12 +94,13 @@
   <script>
     const idCliente = (sessionStorage.getItem("clienteID") || "").trim();
 
-    // Rellenar campos fijos (no editables) como texto verde
+    // Datos desde sessionStorage
     const nombre    = (sessionStorage.getItem("nombreCliente")    || "").trim();
     const direccion = (sessionStorage.getItem("direccionCliente") || "").trim();
     const municipio = (sessionStorage.getItem("localidadCliente") || "").trim();
     const telefono  = (sessionStorage.getItem("telefonoCliente")  || "").trim();
 
+    // Mostrar datos fijos como texto verde
     document.getElementById("nombreSpan").textContent    = nombre    || "Dato no disponible";
     document.getElementById("direccionSpan").textContent = direccion || "Dato no disponible";
     document.getElementById("municipioSpan").textContent = municipio || "Dato no disponible";
@@ -107,7 +108,7 @@
     const telInput = document.getElementById("telefonoInput");
 
     if (telefono && idCliente !== "3") {
-      // Cliente que NO es 3 y ya tiene teléfono -> mostrar como no editable
+      // No es cliente 3 y ya hay teléfono -> mostrar como texto verde
       telInput.remove();
       const telSpan = document.createElement("span");
       telSpan.id = "telefonoSpan";
@@ -115,12 +116,22 @@
       telSpan.textContent = telefono;
       document.querySelector('label[for="telefonoInput"]').after(telSpan);
     } else {
-      // Editable: si tiene teléfono y es cliente 3, lo mostramos en input
-      telInput.value = (telefono && idCliente === "3") ? telefono : "";
+      // Es cliente 3 o no hay teléfono -> campo editable
+      if (telefono && idCliente === "3") {
+        telInput.value = telefono;
+      } else {
+        telInput.value = "";
+        telInput.placeholder = "Teléfono no disponible";
+      }
       telInput.classList.add("editable");
+
+      // 🔹 Borrar placeholder o texto de ejemplo al hacer clic/focus
       telInput.addEventListener("focus", () => {
         if (telInput.placeholder === "Teléfono no disponible") {
           telInput.placeholder = "";
+        }
+        if (telInput.value === "Teléfono no disponible") {
+          telInput.value = "";
         }
       });
     }
@@ -128,7 +139,7 @@
     function gestionarDatos() {
       let telefonoFinal = telefono;
 
-      // Si hay input (editable)
+      // Si hay input editable (no fue sustituido por <span>)
       if (document.getElementById("telefonoInput")) {
         const valor = telInput.value.trim();
         if (valor === "") {
