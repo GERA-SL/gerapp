@@ -102,9 +102,9 @@
 
 function setCampo(spanId, valor, placeholder, key) {
   const span = document.getElementById(spanId);
-if (valor && valor.trim() !== "") {
+if (valor && valor.trim() !== "" && !valor.toLowerCase().includes("no disponible")) {
     span.textContent = valor; // no editable
-  } else {
+} else {
     const input = document.createElement("input");
     input.type = "text";
     input.id = spanId.replace("Span", "Input");
@@ -115,7 +115,8 @@ if (valor && valor.trim() !== "") {
       input.value = "";
       input.placeholder = "";
     });
-    span.replaceWith(input); // ahora sí editable
+    span.replaceWith(input);
+}
   }
 }
 
