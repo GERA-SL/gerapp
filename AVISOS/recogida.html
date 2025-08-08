@@ -146,15 +146,22 @@ actualizarBoton();
       let telefonoFinal = telefono;
 
       // Si hay input (editable)
-      if (document.getElementById("telefonoInput")) {
-        const valor = telInput.value.trim();
-        if (valor === "") {
-          alert("Por favor, introduce el teléfono.");
-          return;
-        }
-        telefonoFinal = valor;
-        sessionStorage.setItem("telefonoCliente", valor);
-      }
+     const editables = Array.from(document.querySelectorAll("input.editable"));
+const incompletos = editables.filter(i => {
+  const val = i.value.trim();
+  return val === "" || val === "Teléfono no disponible";
+});
+
+if (incompletos.length > 0) {
+  alert("Por favor, complete todos los campos antes de continuar.");
+  return;
+}
+
+if (document.getElementById("telefonoInput")) {
+  const valor = telInput.value.trim();
+  telefonoFinal = valor;
+  sessionStorage.setItem("telefonoCliente", valor);
+}
 
       const mensaje = `Hola, soy ${nombre} (ID: ${idCliente}). Solicito RECOGIDA DE ACEITE VEGETAL USADO.
 Dirección: ${direccion}.
