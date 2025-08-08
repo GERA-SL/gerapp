@@ -44,6 +44,15 @@
       border: 2px solid #006633;
       background-color: #f8fff8;
     }
+    /* Estilo para valores no editables */
+    .no-editable {
+      display: block;
+      font-size: 20px;
+      font-weight: bold;
+      color: green;
+      padding: 6px 0;
+      margin-bottom: 10px;
+    }
     .botones { margin-top: 30px; }
     .botones button {
       margin: 0 10px;
@@ -65,16 +74,16 @@
 
   <div class="datos">
     <label for="nombreInput">Cliente:</label>
-    <input id="nombreInput" type="text" placeholder="Nombre del cliente" />
+    <span id="nombreSpan" class="no-editable"></span>
 
     <label for="direccionInput">Dirección:</label>
-    <input id="direccionInput" type="text" placeholder="Dirección" />
+    <span id="direccionSpan" class="no-editable"></span>
 
     <label for="municipioInput">Municipio:</label>
-    <input id="municipioInput" type="text" placeholder="Municipio" />
+    <span id="municipioSpan" class="no-editable"></span>
 
     <label for="telefonoInput">Teléfono:</label>
-    <input id="telefonoInput" type="text" placeholder="Teléfono" />
+    <input id="telefonoInput" type="text" placeholder="Teléfono no disponible" />
   </div>
 
   <div class="botones">
@@ -83,76 +92,57 @@
   </div>
 
   <script>
-    const campos = [
-      { id: "nombre",    key: "nombreCliente" },
-      { id: "direccion", key: "direccionCliente" },
-      { id: "municipio", key: "localidadCliente" },
-      { id: "telefono",  key: "telefonoCliente" }
-    ];
-
     const idCliente = (sessionStorage.getItem("clienteID") || "").trim();
 
-    // Al cargar: cualquier valor que venga de sessionStorage (JSON) -> NO editable.
-    // Solo si idCliente === "3", el teléfono queda editable (aunque exista).
-    campos.forEach(({ id, key }) => {
-      const input = document.getElementById(id + "Input");
-      const valor = (sessionStorage.getItem(key) || "").trim();
+    // Rellenar campos fijos (no editables) como texto verde
+    const nombre    = (sessionStorage.getItem("nombreCliente")    || "").trim();
+    const direccion = (sessionStorage.getItem("direccionCliente") || "").trim();
+    const municipio = (sessionStorage.getItem("localidadCliente") || "").trim();
+    const telefono  = (sessionStorage.getItem("telefonoCliente")  || "").trim();
 
-      if (valor !== "") {
-        input.value = valor;
-        input.readOnly = true;               // Bloqueado por defecto si vino del JSON
-        input.classList.remove("faltante", "editable");
-      } else {
-        // No vino del JSON -> editable para completar
-        input.value = "";
-        input.placeholder = "Dato no disponible. Introducir:";
-        input.readOnly = false;
-        input.classList.add("faltante");
-      }
-    });
+    document.getElementById("nombreSpan").textContent    = nombre    || "Dato no disponible";
+    document.getElementById("direccionSpan").textContent = direccion || "Dato no disponible";
+    document.getElementById("municipioSpan").textContent = municipio || "Dato no disponible";
 
-    // Excepción: cliente 3 -> permitir editar el teléfono SIEMPRE
-    if (idCliente === "3") {
-      const tel = document.getElementById("telefonoInput");
-      tel.readOnly = false;
-      tel.classList.remove("faltante");
-      tel.classList.add("editable");
+    const telInput = document.getElementById("telefonoInput");
+
+    if (telefono && idCliente !== "3") {
+      // Cliente que NO es 3 y ya tiene teléfono -> mostrar como no editable
+      telInput.remove();
+      const telSpan = document.createElement("span");
+      telSpan.id = "telefonoSpan";
+      telSpan.className = "no-editable";
+      telSpan.textContent = telefono;
+      document.querySelector('label[for="telefonoInput"]').after(telSpan);
+    } else {
+      // Editable: si tiene teléfono y es cliente 3, lo mostramos en input
+      telInput.value = (telefono && idCliente === "3") ? telefono : "";
+      telInput.classList.add("editable");
+      telInput.addEventListener("focus", () => {
+        if (telInput.placeholder === "Teléfono no disponible") {
+          telInput.placeholder = "";
+        }
+      });
     }
 
     function gestionarDatos() {
-      let todosRellenados = true;
+      let telefonoFinal = telefono;
 
-      campos.forEach(({ id, key }) => {
-        const input = document.getElementById(id + "Input");
-
-        // Solo guardamos lo que sea editable (no bloqueado) o lo que esté faltante
-        if (!input.readOnly) {
-          const valor = input.value.trim();
-          if (valor === "") {
-            todosRellenados = false;
-            input.classList.add("faltante");
-          } else {
-            sessionStorage.setItem(key, valor);
-            input.classList.remove("faltante");
-          }
+      // Si hay input (editable)
+      if (document.getElementById("telefonoInput")) {
+        const valor = telInput.value.trim();
+        if (valor === "") {
+          alert("Por favor, introduce el teléfono.");
+          return;
         }
-      });
-
-      if (!todosRellenados) {
-        alert("Por favor, completa los campos obligatorios.");
-        return;
+        telefonoFinal = valor;
+        sessionStorage.setItem("telefonoCliente", valor);
       }
 
-      const nombre    = sessionStorage.getItem("nombreCliente")    || "";
-      const direccion = sessionStorage.getItem("direccionCliente") || "";
-      const municipio = sessionStorage.getItem("localidadCliente") || "";
-      const telefono  = sessionStorage.getItem("telefonoCliente")  || "";
-      const id        = sessionStorage.getItem("clienteID")        || "Sin ID";
-
-      const mensaje = `Hola, soy ${nombre} (ID: ${id}). Solicito RECOGIDA DE ACEITE VEGETAL USADO.
+      const mensaje = `Hola, soy ${nombre} (ID: ${idCliente}). Solicito RECOGIDA DE ACEITE VEGETAL USADO.
 Dirección: ${direccion}.
 Municipio: ${municipio}.
-Teléfono: ${telefono}.`;
+Teléfono: ${telefonoFinal}.`;
 
       if (!confirm(`¿Son correctos estos datos?\n\n${mensaje}`)) return;
 
