@@ -100,10 +100,29 @@
     const municipio = (sessionStorage.getItem("localidadCliente") || "").trim();
     const telefono  = (sessionStorage.getItem("telefonoCliente")  || "").trim();
 
-    document.getElementById("nombreSpan").textContent    = nombre    || "Dato no disponible";
-    document.getElementById("direccionSpan").textContent = direccion || "Dato no disponible";
-    document.getElementById("municipioSpan").textContent = municipio || "Dato no disponible";
+function setCampo(spanId, valor, placeholder, key) {
+  const span = document.getElementById(spanId);
+  if (valor) {
+    span.textContent = valor; // no editable
+  } else {
+    const input = document.createElement("input");
+    input.type = "text";
+    input.id = spanId.replace("Span", "Input");
+    input.className = "editable";
+    input.placeholder = `${placeholder} no disponible`;
+    input.dataset.key = key;
+    input.addEventListener("focus", () => {
+      input.value = "";
+      input.placeholder = "";
+    });
+    span.replaceWith(input); // ahora sí editable
+  }
+}
 
+setCampo("nombreSpan",    nombre,    "Cliente",   "nombreCliente");
+setCampo("direccionSpan", direccion, "Dirección", "direccionCliente");
+setCampo("municipioSpan", municipio, "Municipio", "localidadCliente");
+    
     const telInput = document.getElementById("telefonoInput");
 
     if (telefono && idCliente !== "3") {
