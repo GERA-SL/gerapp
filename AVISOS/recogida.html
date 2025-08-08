@@ -102,7 +102,7 @@
 
 function setCampo(spanId, valor, placeholder, key) {
   const span = document.getElementById(spanId);
-  if (valor) {
+if (valor && valor.trim() !== "") {
     span.textContent = valor; // no editable
   } else {
     const input = document.createElement("input");
