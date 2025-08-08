@@ -122,6 +122,21 @@
   telInput.value = "";
   telInput.placeholder = "";
 });
+      // Desactivar/activar botón según si todos los editables tienen valor
+const btnOk = document.querySelector(".ok");
+function actualizarBoton() {
+  const editables = Array.from(document.querySelectorAll("input.editable"));
+  if (editables.length === 0) {
+    btnOk.disabled = false; // no hay campos a rellenar
+    return;
+  }
+  const completos = editables.every(i => i.value.trim() !== "");
+  btnOk.disabled = !completos;
+}
+document.querySelectorAll("input.editable").forEach(i => {
+  i.addEventListener("input", actualizarBoton);
+});
+actualizarBoton();
     }
 
     function gestionarDatos() {
@@ -147,8 +162,7 @@ Teléfono: ${telefonoFinal}.`;
 
       const numeroWhatsApp = "34670726699";
       const url = `https://wa.me/${numeroWhatsApp}?text=${encodeURIComponent(mensaje)}`;
-      window.open(url, '_blank');
-      window.location.href = '../panel.html';
+      window.location.href = url;
     }
   </script>
 </body>
