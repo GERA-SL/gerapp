@@ -12,12 +12,10 @@
       padding: 20px;
       text-align: center;
     }
-
     h1 {
       color: #006633;
       margin-bottom: 30px;
     }
-
     .datos {
       font-size: 18px;
       margin-bottom: 30px;
@@ -26,13 +24,11 @@
       margin-right: auto;
       text-align: left;
     }
-
     .datos label {
       display: block;
       margin: 10px 0 3px;
       font-weight: bold;
     }
-
     input {
       width: 100%;
       padding: 8px;
@@ -40,16 +36,15 @@
       margin-bottom: 10px;
       box-sizing: border-box;
     }
-
     .faltante {
       border: 2px solid #cc0000;
       background-color: #fff8f8;
     }
-
-    .botones {
-      margin-top: 30px;
+    .editable {
+      border: 2px solid #006633;
+      background-color: #f8fff8;
     }
-
+    .botones { margin-top: 30px; }
     .botones button {
       margin: 0 10px;
       padding: 12px 24px;
@@ -59,22 +54,10 @@
       cursor: pointer;
       color: white;
     }
-
-    .ok {
-      background-color: #006633;
-    }
-
-    .ok:hover {
-      background-color: #004d26;
-    }
-
-    .cancelar {
-      background-color: #888;
-    }
-
-    .cancelar:hover {
-      background-color: #555;
-    }
+    .ok { background-color: #006633; }
+    .ok:hover { background-color: #004d26; }
+    .cancelar { background-color: #888; }
+    .cancelar:hover { background-color: #555; }
   </style>
 </head>
 <body>
@@ -101,36 +84,48 @@
 
   <script>
     const campos = [
-      { id: "nombre", key: "nombreCliente" },
+      { id: "nombre",    key: "nombreCliente" },
       { id: "direccion", key: "direccionCliente" },
       { id: "municipio", key: "localidadCliente" },
-      { id: "telefono", key: "telefonoCliente" }
+      { id: "telefono",  key: "telefonoCliente" }
     ];
 
-    let datosCompletos = true;
+    const idCliente = (sessionStorage.getItem("clienteID") || "").trim();
 
+    // Al cargar: cualquier valor que venga de sessionStorage (JSON) -> NO editable.
+    // Solo si idCliente === "3", el teléfono queda editable (aunque exista).
     campos.forEach(({ id, key }) => {
       const input = document.getElementById(id + "Input");
-      const valor = sessionStorage.getItem(key);
+      const valor = (sessionStorage.getItem(key) || "").trim();
 
-      if (valor && valor.trim() !== "") {
-        input.value = valor.trim();
-        input.readOnly = true;
-        input.classList.remove("faltante");
+      if (valor !== "") {
+        input.value = valor;
+        input.readOnly = true;               // Bloqueado por defecto si vino del JSON
+        input.classList.remove("faltante", "editable");
       } else {
-        input.readOnly = false;
+        // No vino del JSON -> editable para completar
         input.value = "";
         input.placeholder = "Dato no disponible. Introducir:";
+        input.readOnly = false;
         input.classList.add("faltante");
-        datosCompletos = false;
       }
     });
+
+    // Excepción: cliente 3 -> permitir editar el teléfono SIEMPRE
+    if (idCliente === "3") {
+      const tel = document.getElementById("telefonoInput");
+      tel.readOnly = false;
+      tel.classList.remove("faltante");
+      tel.classList.add("editable");
+    }
 
     function gestionarDatos() {
       let todosRellenados = true;
 
       campos.forEach(({ id, key }) => {
         const input = document.getElementById(id + "Input");
+
+        // Solo guardamos lo que sea editable (no bloqueado) o lo que esté faltante
         if (!input.readOnly) {
           const valor = input.value.trim();
           if (valor === "") {
@@ -144,17 +139,17 @@
       });
 
       if (!todosRellenados) {
-        alert("Por favor, complete todos los campos obligatorios.");
+        alert("Por favor, completa los campos obligatorios.");
         return;
       }
 
-      const idCliente = sessionStorage.getItem("clienteID") || "Sin ID";
-      const nombre = sessionStorage.getItem("nombreCliente") || "";
+      const nombre    = sessionStorage.getItem("nombreCliente")    || "";
       const direccion = sessionStorage.getItem("direccionCliente") || "";
       const municipio = sessionStorage.getItem("localidadCliente") || "";
-      const telefono = sessionStorage.getItem("telefonoCliente") || "";
+      const telefono  = sessionStorage.getItem("telefonoCliente")  || "";
+      const id        = sessionStorage.getItem("clienteID")        || "Sin ID";
 
-      const mensaje = `Hola, soy ${nombre} (ID: ${idCliente}). Solicito RECOGIDA DE ACEITE VEGETAL USADO.
+      const mensaje = `Hola, soy ${nombre} (ID: ${id}). Solicito RECOGIDA DE ACEITE VEGETAL USADO.
 Dirección: ${direccion}.
 Municipio: ${municipio}.
 Teléfono: ${telefono}.`;
@@ -169,4 +164,3 @@ Teléfono: ${telefono}.`;
   </script>
 </body>
 </html>
-
