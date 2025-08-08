@@ -119,10 +119,9 @@
       telInput.value = (telefono && idCliente === "3") ? telefono : "";
       telInput.classList.add("editable");
       telInput.addEventListener("focus", () => {
-        if (telInput.placeholder === "Teléfono no disponible") {
-          telInput.placeholder = "";
-        }
-      });
+  telInput.value = "";
+  telInput.placeholder = "";
+});
     }
 
     function gestionarDatos() {
